@@ -2,13 +2,14 @@ package tree;
 
 import functions.Function;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Nils on 10.01.2017.
  */
 public class GeneticTreeNode extends GeneticTreeComponent {
-    private List<GeneticTreeComponent> children;
+    private List<GeneticTreeComponent> children = new ArrayList<>();
     private Function function;
 
     public GeneticTreeNode(final GeneticTreeNode parent, final Function function) {
@@ -24,5 +25,9 @@ public class GeneticTreeNode extends GeneticTreeComponent {
 
     public List<GeneticTreeComponent> getChildren() {
         return children;
+    }
+
+    public Function getFunction() {
+        return function;
     }
 }

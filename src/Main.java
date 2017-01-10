@@ -1,5 +1,10 @@
 import functions.*;
 import io.CSVUtils;
+import terminals.ConstantTerminal;
+import terminals.RandomTerminal;
+import terminals.Terminal;
+import tree.GeneticTree;
+import tree.GeneticTreeBuilder;
 
 import java.io.IOException;
 import java.util.Dictionary;
@@ -13,17 +18,24 @@ public class Main {
 
     public static void main(String[] args) throws IllegalAccessException, InstantiationException {
         final List<List<String>> values;
-        final Class[] functionSet = new Class[] {
-                AddFunction.class,
-                SubtractFunction.class,
-                MultiplyFunction.class,
-                DivideFunction.class,
-                SinusFunction.class,
-                CosinusFunction.class,
-                ExpFunction.class
+        final Function[] functionSet = new Function[] {
+                new AddFunction(),
+                new SubtractFunction(),
+                new MultiplyFunction(),
+                new DivideFunction(),
+                new SinusFunction(),
+                new CosinusFunction(),
+                new ExpFunction()
+        };
+        final Terminal[] terminalSet = new Terminal[] {
+                new ConstantTerminal(4.0),
+                new RandomTerminal(-5.0, 5.0),
+                new RandomTerminal(-5.0, 5.0),
+                new RandomTerminal(-5.0, 5.0)
         };
 
-        System.out.println(functionSet[1].newInstance());
+        final GeneticTreeBuilder builder = new GeneticTreeBuilder(2, terminalSet, functionSet);
+        final GeneticTree tree = builder.build();
 
         try {
             values = CSVUtils.parseFile("values.csv");

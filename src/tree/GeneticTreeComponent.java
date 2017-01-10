@@ -20,7 +20,18 @@ public abstract class GeneticTreeComponent {
         setParent(parent);
     }
 
-    public void setParent(final GeneticTreeNode parent) {
+    public void setParent(GeneticTreeNode parent) {
         this.parent = parent;
+
+        level = 0;
+
+        while (parent != null) {
+            level++;
+            parent = parent.parent;
+        }
+    }
+
+    public int getLevel() {
+        return level;
     }
 }
