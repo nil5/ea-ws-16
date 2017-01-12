@@ -16,4 +16,9 @@ public class ExpFunction extends Function {
 
         return Math.pow(params[0], params[1]);
     }
+
+    @Override
+    public int getNumParams() {
+        return numParams;
+    }
 }

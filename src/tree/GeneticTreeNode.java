@@ -12,7 +12,7 @@ public class GeneticTreeNode extends GeneticTreeComponent {
     private List<GeneticTreeComponent> children = new ArrayList<>();
     private Function function;
 
-    public GeneticTreeNode(final GeneticTreeNode parent, final Function function) {
+    public GeneticTreeNode(final GeneticTreeNode parent, Function function) {
         super(parent, GeneticTreeComponent.NODE);
 
         this.function = function;
@@ -30,4 +30,6 @@ public class GeneticTreeNode extends GeneticTreeComponent {
     public Function getFunction() {
         return function;
     }
+
+    public void setFunction(Function function) {this.function = function;}
 }

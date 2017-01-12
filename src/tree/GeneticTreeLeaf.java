@@ -8,7 +8,7 @@ import terminals.Terminal;
 public class GeneticTreeLeaf extends GeneticTreeComponent {
     private Terminal terminal;
 
-    public GeneticTreeLeaf(final GeneticTreeNode parent, final Terminal terminal) {
+    public GeneticTreeLeaf(final GeneticTreeNode parent, Terminal terminal) {
         super(parent, GeneticTreeComponent.LEAF);
 
         this.terminal = terminal;
@@ -17,4 +17,6 @@ public class GeneticTreeLeaf extends GeneticTreeComponent {
     public Terminal getTerminal() {
         return terminal;
     }
+
+    public void setTerminal(Terminal terminal) {this.terminal = terminal;}
 }

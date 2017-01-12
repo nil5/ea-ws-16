@@ -1,6 +1,7 @@
 package tree;
 
 import functions.Function;
+import help.Helper;
 import terminals.Terminal;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -12,16 +13,17 @@ public class GeneticTreeBuilder {
     public static final int MODE_RANDOM = 1;
 
     private final int depth;
-    private final Terminal[] terminalSet;
-    private final Function[] functionSet;
+    private final Helper helper;
+    //private final Terminal[] terminalSet;
+    //private final Function[] functionSet;
 
     private int mode = MODE_RANDOM;
 
-
-    public GeneticTreeBuilder(final int depth, final Terminal[] terminalSet, final Function[] functionSet) {
+    public GeneticTreeBuilder(final int depth/*, final Terminal[] terminalSet, final Function[] functionSet*/) {
         this.depth = depth;
-        this.terminalSet = terminalSet;
-        this.functionSet = functionSet;
+        this.helper = new Helper();
+        //this.terminalSet = terminalSet;
+        //this.functionSet = functionSet;
     }
 
     public GeneticTreeBuilder setMode(final int mode) {
@@ -34,7 +36,7 @@ public class GeneticTreeBuilder {
 
         switch (mode) {
             case MODE_RANDOM:
-                root = new GeneticTreeNode(null, getRandomFunction());
+                root = new GeneticTreeNode(null, helper.getRandomFunction());
                 generateRandomChildren(root);
                 break;
             default:
@@ -50,17 +52,18 @@ public class GeneticTreeBuilder {
         if (node.getLevel() == depth - 1) {
             for (int i = 0; i < numChildren; i++) {
                 // Jedes Blatt einmal verwenden oder sogar der Reihe nach?
-                node.addChild(new GeneticTreeLeaf(node, getRandomTerminal()));
+                node.addChild(new GeneticTreeLeaf(node, helper.getRandomTerminal()));
             }
         } else {
             for (int i = 0; i < numChildren; i++) {
-                final GeneticTreeNode child = new GeneticTreeNode(node, getRandomFunction());
+                final GeneticTreeNode child = new GeneticTreeNode(node, helper.getRandomFunction());
                 node.addChild(child);
                 generateRandomChildren(child);
             }
         }
     }
 
+    /*
     private Terminal getRandomTerminal() {
         try {
             return terminalSet[ThreadLocalRandom.current().nextInt(0, terminalSet.length)];
@@ -79,5 +82,5 @@ public class GeneticTreeBuilder {
         }
 
         return null;
-    }
+    }*/
 }

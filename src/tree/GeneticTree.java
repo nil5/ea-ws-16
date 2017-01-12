@@ -9,4 +9,8 @@ public class GeneticTree {
     public GeneticTree(final GeneticTreeComponent root) {
         this.root = root;
     }
+
+    public GeneticTreeComponent getRoot() {
+        return root;
+    }
 }

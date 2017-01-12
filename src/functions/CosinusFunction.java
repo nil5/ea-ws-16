@@ -16,4 +16,9 @@ public class CosinusFunction extends Function {
 
         return Math.cos(params[0]);
     }
+
+    @Override
+    public int getNumParams() {
+        return numParams;
+    }
 }
