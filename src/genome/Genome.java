@@ -70,7 +70,7 @@ public class Genome {
                 Function oldFunction = node.getFunction();
                 Function newFunction = helper.getRandomFunction();
 
-                if (oldFunction.getNumParams() == newFunction.getNumParams()) {
+                if (oldFunction.numParams == newFunction.numParams) {
                     node.setFunction(newFunction);
                 } else {
                     System.out.println("Couldn't mutate because Functions have different number of Params");

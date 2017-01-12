@@ -14,8 +14,6 @@ public abstract class Function {
 
     public abstract double execute(double[] params);
 
-    public abstract int getNumParams();
-
     @Override
     public String toString() {
         return "Function '" + name + "', " + numParams + " parameters";

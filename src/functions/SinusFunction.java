@@ -16,9 +16,4 @@ public class SinusFunction extends Function {
 
         return Math.sin(params[0]);
     }
-
-    @Override
-    public int getNumParams() {
-        return numParams;
-    }
 }

@@ -16,9 +16,4 @@ public class MultiplyFunction extends Function {
 
         return params[0] * params[1];
     }
-
-    @Override
-    public int getNumParams() {
-        return numParams;
-    }
 }
