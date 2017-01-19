@@ -6,7 +6,10 @@ package functions;
 public class MultiplyFunction extends Function {
 
     public MultiplyFunction() {
-        super("Multiply", 2);
+        this(2);
+    }
+    public MultiplyFunction(final int numParams) {
+        super("Multiply", numParams);
     }
 
     @Override
@@ -14,6 +17,8 @@ public class MultiplyFunction extends Function {
         if (params.length != numParams) throw new ArithmeticException("Invalid number of parameters for function '" +
                 name + "'. Expected " + numParams + ", got " + params.length);
 
-        return params[0] * params[1];
+        double product = 0;
+        for (double p : params) product *= p;
+        return product;
     }
 }

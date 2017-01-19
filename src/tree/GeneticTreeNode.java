@@ -32,4 +32,9 @@ public class GeneticTreeNode extends GeneticTreeComponent {
     }
 
     public void setFunction(Function function) {this.function = function;}
+
+    @Override
+    public String toString() {
+        return "NODE level " + level + ", function: " + function;
+    }
 }

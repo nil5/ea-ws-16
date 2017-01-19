@@ -14,4 +14,9 @@ public class ConstantTerminal implements Terminal {
     public double getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return "CONSTANT Terminal " + value;
+    }
 }

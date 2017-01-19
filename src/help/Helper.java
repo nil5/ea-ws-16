@@ -11,7 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * Created by Laura on 12.01.2017.
  */
 public class Helper {
-    final Function[] functionSet = new Function[] {
+    public static final Function[] functionSet = new Function[] {
             new AddFunction(),
             new SubtractFunction(),
             new MultiplyFunction(),
@@ -20,14 +20,14 @@ public class Helper {
             new CosinusFunction(),
             new ExpFunction()
     };
-    final Terminal[] terminalSet = new Terminal[] {
-            new ConstantTerminal(4.0),
+
+    public static final Terminal[] terminalSet = new RandomTerminal[] {
             new RandomTerminal(-5.0, 5.0),
             new RandomTerminal(-5.0, 5.0),
             new RandomTerminal(-5.0, 5.0)
     };
 
-    public Terminal getRandomTerminal() {
+    public static Terminal getRandomTerminal() {
         try {
             return terminalSet[ThreadLocalRandom.current().nextInt(0, terminalSet.length)];
         } catch (Exception e) {
@@ -37,7 +37,7 @@ public class Helper {
         return null;
     }
 
-    public Function getRandomFunction() {
+    public static Function getRandomFunction() {
         try {
             return functionSet[ThreadLocalRandom.current().nextInt(0, functionSet.length)];
         } catch (Exception e) {
@@ -45,5 +45,10 @@ public class Helper {
         }
 
         return null;
+    }
+
+    public static Object getRandomObject() {
+        final int r = ThreadLocalRandom.current().nextInt(0, functionSet.length + terminalSet.length);
+        return r < functionSet.length ? functionSet[r] : terminalSet[r - functionSet.length];
     }
 }

@@ -16,4 +16,9 @@ public class RandomTerminal implements Terminal {
     public double getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return "RANDOM Terminal " + value;
+    }
 }

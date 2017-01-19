@@ -1,7 +1,5 @@
 package tree;
 
-import java.util.List;
-
 /**
  * Created by Nils on 10.01.2017.
  */
@@ -34,4 +32,11 @@ public abstract class GeneticTreeComponent {
     public int getLevel() {
         return level;
     }
+
+    public void accept(TreeVisitor visitor) {
+        visitor.visitComponent(this);
+    }
+
+    @Override
+    public abstract String toString();
 }

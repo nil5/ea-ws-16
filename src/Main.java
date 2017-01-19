@@ -1,14 +1,11 @@
-import functions.*;
 import genome.Genome;
 import io.CSVUtils;
-import terminals.ConstantTerminal;
-import terminals.RandomTerminal;
-import terminals.Terminal;
+import terminals.IOTerminalSet;
 import tree.GeneticTree;
-import tree.GeneticTreeBuilder;
+import tree.TreePrintVisitor;
 
 import java.io.IOException;
-import java.util.Dictionary;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,7 +15,6 @@ public class Main {
     private static double[] input, output;
 
     public static void main(String[] args) throws IllegalAccessException, InstantiationException {
-        final List<List<String>> values;
         /*final Function[] functionSet = new Function[] {
                 new AddFunction(),
                 new SubtractFunction(),
@@ -38,8 +34,8 @@ public class Main {
         final GeneticTreeBuilder builder = new GeneticTreeBuilder(2, terminalSet, functionSet);
         final GeneticTree tree = builder.build();*/
 
-        Genome genome = new Genome(4,2,1,0.9);
-        genome.mutate();
+        final IOTerminalSet[] testTerminals;
+        final List<List<String>> values;
 
         try {
             values = CSVUtils.parseFile("values.csv");
@@ -49,18 +45,19 @@ public class Main {
             return;
         }
 
-        final int size = values.size();
+        final int lineCount = values.size();
 
-        input = new double[size];
-        output = new double[size];
+        testTerminals = new IOTerminalSet[lineCount];
 
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < lineCount; i++) testTerminals[i] = new IOTerminalSet(values.get(i));
+
+        Genome genome = new Genome(GeneticTree.MODE_HALF, testTerminals,2,1,0.9);
+        genome.mutate();
+
+        for (int i = 0; i < lineCount; i++) {
             final List<String> line = values.get(i);
 
-            //System.out.println("Line " + (i + 1) + ": " + line.get(0) + " => " + line.get(1));
-
-            input[i] = Double.valueOf(line.get(0));
-            output[i] = Double.valueOf(line.get(1));
+            System.out.println("Line " + (i + 1) + ": " + line.get(0) + " => " + line.get(1));
         }
     }
 }

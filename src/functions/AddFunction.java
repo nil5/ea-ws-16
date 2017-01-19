@@ -6,7 +6,10 @@ package functions;
 public class AddFunction extends Function {
 
     public AddFunction() {
-        super("Add", 2);
+        this(2);
+    }
+    public AddFunction(final int numParams) {
+        super("Add", numParams);
     }
 
     @Override
@@ -14,6 +17,8 @@ public class AddFunction extends Function {
         if (params.length != numParams) throw new ArithmeticException("Invalid number of parameters for function '" +
                 name + "'. Expected " + numParams + ", got " + params.length);
 
-        return params[0] + params[1];
+        double sum = 0;
+        for (double p : params) sum += p;
+        return sum;
     }
 }

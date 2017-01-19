@@ -19,4 +19,9 @@ public class GeneticTreeLeaf extends GeneticTreeComponent {
     }
 
     public void setTerminal(Terminal terminal) {this.terminal = terminal;}
+
+    @Override
+    public String toString() {
+        return "LEAF level " + level + ", terminal: " + terminal;
+    }
 }
