@@ -9,7 +9,7 @@ import tree.GeneticTreeNode;
 public class SubTreeCrossover extends Mutator {
     private final Selection selection;
 
-    public SubTreeCrossover(final boolean protectBest, final int tournamentSize) {
+    public SubTreeCrossover(final boolean protectBest) {
         super(2, 2, protectBest);
 
         this.selection = new TournamentSelection(protectBest);

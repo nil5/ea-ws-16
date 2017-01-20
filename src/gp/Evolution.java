@@ -14,7 +14,7 @@ public class Evolution implements Runnable {
 
     @Override
     public void run() {
-        final Mutator crossoverMutator = new SubTreeCrossover(true, 2);
+        final Mutator crossoverMutator = new SubTreeCrossover(true);
 
         for (int i = 0; i < Config.GENERATIONCOUNT; i++) {
             genome.mutate();
