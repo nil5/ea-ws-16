@@ -15,12 +15,13 @@ public abstract class GeneticTreeComponent {
     protected GeneticTreeComponent(final GeneticTreeNode parent, final int type) {
         this.type = type;
 
-        addParent(parent);
+        setParent(parent);
     }
 
     public boolean setParent(final GeneticTreeNode parent) {
-        boolean success = removeParent();
-        //TODO
+        boolean success = removeParent() && addParent(parent);
+        updateLevel();
+        return success;
     }
 
     private boolean removeParent() {
@@ -50,14 +51,19 @@ public abstract class GeneticTreeComponent {
         }
     }
 
-    public boolean swapParents(final GeneticTreeComponent component) {
-        final GeneticTreeNode leftParent = this.parent;
-        final GeneticTreeNode rightParent = component.parent;
+    public boolean swapParents(final GeneticTreeComponent that) {
+        final GeneticTreeNode thisParent = this.parent;
+        final GeneticTreeNode thatParent = that.parent;
 
-        removeParent();
-        component.removeParent();
+        boolean success = true;
 
+        if (success) success = this.removeParent();
+        if (success) success = that.removeParent();
 
+        if (success) success = this.addParent(thatParent);
+        if (success) success = that.addParent(thisParent);
+
+        return success;
     }
 
     public GeneticTreeNode getParent() {

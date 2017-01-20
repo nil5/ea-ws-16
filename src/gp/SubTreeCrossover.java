@@ -19,7 +19,7 @@ public class SubTreeCrossover extends Mutator {
         /*final Gene[] nextGeneration = new Gene[genes.length];
         int nextGenerationIndex = 0;*/
 
-        for (int i = 0; i < mutationRate * genome.length; i++) {
+        outer: for (int i = 0; i < mutationRate * genome.length; i++) {
             final Gene[] parents = selection.select(genome, inputGeneCount);
             /*final Gene[] children = new Gene[inputGeneCount];*/
             final GeneticTreeNode[] subNodes = new GeneticTreeNode[inputGeneCount];
@@ -31,25 +31,28 @@ public class SubTreeCrossover extends Mutator {
                 /*children[j] = new Gene(parents[j]);*/
                 /*nextGeneration[nextGenerationIndex++] = children[j];*/
 
-                if (subNodeLevel < 0) {
-                    subNodes[j] = /*children[j]*/parents[j].getRandomSubNode();
-                    subNodeLevel = subNodes[j].getLevel();
-                } else subNodes[j] = /*children[j]*/parents[j].getRandomSubNode(subNodeLevel);
+                subNodes[j] = parents[j].getRandomSubNode(subNodeLevel);
 
-                if (subNodes[j] == null)
-                    throw new NullPointerException("One of the crossover subnodes is null.");
+                if (subNodes[j] == null) {
+                    System.out.println("Failed to do crossover. Did not find an appropriate sub node.");
+                    continue outer;
+                }
+
+                if (subNodeLevel < 0) subNodeLevel = subNodes[j].getLevel();
             }
 
             for (int j = 0; j < parents.length; j++) {
                 final int k = (j + 1) % parents.length;
-                final GeneticTreeNode tmpParent = subNodes[j].getParent();
+                
+                System.out.println(parents[j]);
+                System.out.println(parents[k]);
 
                 parents[j].print();
                 parents[k].print();
 
-                subNodes[j].setParent(subNodes[k].getParent());
-                subNodes[k].setParent(tmpParent);
+                subNodes[j].swapParents(subNodes[k]);
 
+                System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
                 parents[j].print();
                 parents[k].print();
 
@@ -58,6 +61,7 @@ public class SubTreeCrossover extends Mutator {
 
                 System.out.println(parents[j]);
                 System.out.println(parents[k]);
+                System.out.println("---------------------------------------------------------------------------");
             }
         }
     }

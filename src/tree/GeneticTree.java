@@ -132,11 +132,9 @@ public class GeneticTree {
         }
     }
 
-    public GeneticTreeNode getRandomSubNode() {
-        return getRandomSubNode(Helper.rand(1, maxDepth));
-    }
+    public GeneticTreeNode getRandomSubNode(int level) {
+        if (level < 0) level = Helper.rand(1, maxDepth);
 
-    public GeneticTreeNode getRandomSubNode(final int level) {
         final List<GeneticTreeComponent> levelList = new ArrayList<>();
 
         getLevel(level, GeneticTreeComponent.NODE, root, levelList);
