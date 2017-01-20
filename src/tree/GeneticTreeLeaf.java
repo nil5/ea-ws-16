@@ -1,5 +1,6 @@
 package tree;
 
+import help.Config;
 import terminals.Terminal;
 
 /**
@@ -9,13 +10,13 @@ public class GeneticTreeLeaf extends GeneticTreeComponent {
     private Terminal terminal;
 
     public GeneticTreeLeaf(final GeneticTreeLeaf leaf, final GeneticTreeNode parent) {
-        super(parent, GeneticTreeComponent.LEAF);
+        super(parent, Config.LEAF);
 
         terminal = leaf.terminal;
     }
 
     public GeneticTreeLeaf(final GeneticTreeNode parent, Terminal terminal) {
-        super(parent, GeneticTreeComponent.LEAF);
+        super(parent, Config.LEAF);
 
         this.terminal = terminal;
     }

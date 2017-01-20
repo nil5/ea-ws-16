@@ -1,5 +1,7 @@
 package gp;
 
+import help.Config;
+
 /**
  * Created by Nils on 19.01.2017.
  */
@@ -12,9 +14,9 @@ public class Evolution implements Runnable {
 
     @Override
     public void run() {
-        final Mutator crossoverMutator = new SubTreeCrossover(0.9, true, 2);
+        final Mutator crossoverMutator = new SubTreeCrossover(true, 2);
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < Config.GENERATIONCOUNT; i++) {
             genome.mutate();
 
             crossoverMutator.mutate(genome);

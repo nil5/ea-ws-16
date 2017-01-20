@@ -1,5 +1,6 @@
 package gp;
 
+import help.Config;
 import terminals.IOTerminalSet;
 import tree.GeneticTree;
 import tree.TreeCalcVisitor;
@@ -25,7 +26,7 @@ public class Gene extends GeneticTree implements Comparable<Gene> {
     }
 
     public Gene(final IOTerminalSet testTerminal, final int maxDepth) {
-        this(testTerminal, maxDepth, GeneticTree.MODE_HALF);
+        this(testTerminal, maxDepth, Config.MODE_HALF);
     }
 
     public Gene(final IOTerminalSet testTerminal, final int maxDepth, final int buildMode) {

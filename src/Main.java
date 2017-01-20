@@ -1,5 +1,6 @@
 import gp.Evolution;
 import gp.Genome;
+import help.Config;
 import io.CSVUtils;
 import terminals.IOTerminalSet;
 import tree.GeneticTree;
@@ -15,30 +16,11 @@ public class Main {
     private static double[] input, output;
 
     public static void main(String[] args) throws IllegalAccessException, InstantiationException {
-        /*final Function[] functionSet = new Function[] {
-                new AddFunction(),
-                new SubtractFunction(),
-                new MultiplyFunction(),
-                new DivideFunction(),
-                new SinusFunction(),
-                new CosinusFunction(),
-                new ExpFunction()
-        };
-        final Terminal[] terminalSet = new Terminal[] {
-                new ConstantTerminal(4.0),
-                new RandomTerminal(-5.0, 5.0),
-                new RandomTerminal(-5.0, 5.0),
-                new RandomTerminal(-5.0, 5.0)
-        };
-
-        final GeneticTreeBuilder builder = new GeneticTreeBuilder(2, terminalSet, functionSet);
-        final GeneticTree tree = builder.build();*/
-
         final IOTerminalSet[] testTerminals;
         final List<List<String>> values;
 
         try {
-            values = CSVUtils.parseFile("values.csv");
+            values = CSVUtils.parseFile(Config.FILENAME);
         } catch (IOException e) {
             System.out.println("Could not read values file.");
             e.printStackTrace();
@@ -51,7 +33,7 @@ public class Main {
 
         for (int i = 0; i < lineCount; i++) testTerminals[i] = new IOTerminalSet(values.get(i));
 
-        Genome genome = new Genome(GeneticTree.MODE_HALF, testTerminals,2,1,0.9, true);
+        Genome genome = new Genome(Config.MODE_HALF, testTerminals, true);
 
         for (int i = 0; i < lineCount; i++) {
             final List<String> line = values.get(i);

@@ -1,6 +1,8 @@
 package tree;
 
 
+import help.Config;
+
 import java.util.List;
 
 /**
@@ -11,7 +13,7 @@ public class TreePrintVisitor implements TreeVisitor<Void> {
     public Void visitComponent(GeneticTreeComponent component) {
         System.out.println(new String(new char[component.level]).replace("\0", "\t") + component);
 
-        if (component.type == GeneticTreeComponent.NODE) {
+        if (component.type == Config.NODE) {
             final List<GeneticTreeComponent> children = ((GeneticTreeNode) component).getChildren();
             for(GeneticTreeComponent child : children) child.accept(this);
         }

@@ -1,5 +1,6 @@
 package gp;
 
+import help.Config;
 import help.Helper;
 
 import java.util.Arrays;
@@ -8,11 +9,9 @@ import java.util.Arrays;
  * Created by Nils on 19.01.2017.
  */
 public class TournamentSelection extends Selection {
-    public final int tournamentSize;
     public final boolean protectBest;
 
-    public TournamentSelection(final int tournamentSize, final boolean protectBest) {
-        this.tournamentSize = tournamentSize;
+    public TournamentSelection(final boolean protectBest) {
         this.protectBest = protectBest;
     }
 
@@ -22,7 +21,7 @@ public class TournamentSelection extends Selection {
         final int startIndex = protectBest ? 1 : 0;
 
         for (int i = 0; i < selection.length; i++) {
-            final Gene[] tournament = new Gene[tournamentSize];
+            final Gene[] tournament = new Gene[Config.TOURNAMENTSIZE];
 
             for (int j = 0; j < tournament.length; j++) {
                 tournament[j] = genome.get(Helper.rand(startIndex, genome.length));

@@ -1,6 +1,7 @@
 package gp;
 
 import functions.*;
+import help.Config;
 import help.Helper;
 import terminals.IOTerminalSet;
 import terminals.Terminal;
@@ -16,10 +17,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class Genome {
     public final int length;
-    public final int maxTreeDepth;
     public final boolean protectBest;
-    private double recombinationRate;
-    private double mutationRate;
     private double fitness = 0;
 
     private IOTerminalSet[] testTerminalSets;
@@ -29,21 +27,17 @@ public class Genome {
     private int bestGeneIndex;
 
 
-    public Genome(final int buildMode, final IOTerminalSet[] testTerminalSets, final int maxTreeDepth,
-                  final double mutationRate, final double recombinationRate, final boolean protectBest) {
+    public Genome(final int buildMode, final IOTerminalSet[] testTerminalSets, final boolean protectBest) {
         this.testTerminalSets = testTerminalSets;
         this.length = testTerminalSets.length;
-        this.maxTreeDepth = maxTreeDepth;
-        this.mutationRate = mutationRate;
-        this.recombinationRate = recombinationRate;
         this.protectBest = protectBest;
         this.genes = new Gene[length];
 
         int i = 0;
 
-        if (buildMode == GeneticTree.MODE_HALF) {
-            for (; i < length / 2; i++) setGene(i, GeneticTree.MODE_FULL);
-            for (; i < length; i++) setGene(i, GeneticTree.MODE_GROW);
+        if (buildMode == Config.MODE_HALF) {
+            for (; i < length / 2; i++) setGene(i, Config.MODE_FULL);
+            for (; i < length; i++) setGene(i, Config.MODE_GROW);
         } else for (; i < length; i++) setGene(i, buildMode);
 
         updateBestGeneIndex();
@@ -60,7 +54,7 @@ public class Genome {
     }
 
     public void setGene(final int index, final int mode) {
-        setGene(index, new Gene(testTerminalSets[index], maxTreeDepth, mode));
+        setGene(index, new Gene(testTerminalSets[index], Config.MAXTREEDEPTH, mode));
     }
 
     public void setGene(final int index, final Gene gene) {
@@ -74,7 +68,7 @@ public class Genome {
     }
 
     public void mutate(final boolean sortBefore) {
-        final int mutationCount = (int) (length * mutationRate);
+        final int mutationCount = (int) (length * Config.MUTATIONRATE);
 
         System.out.println("Performing " + mutationCount + " mutations");
 
@@ -95,14 +89,14 @@ public class Genome {
             System.out.println("Mutate Compontant Nr: " + componentNo);
 
             final GeneticTreeComponent component = components.get(componentNo);
-            if (component.type == GeneticTreeComponent.LEAF) {
+            if (component.type == Config.LEAF) {
                 final GeneticTreeLeaf leaf = (GeneticTreeLeaf) component;
                 final Terminal oldTerminal = leaf.getTerminal(), newTerminal = Helper.getRandomTerminal();
 
                 leaf.setTerminal(newTerminal);
 
                 System.out.println("Mutated leaf " + oldTerminal.getValue() + " to " + newTerminal.getValue());
-            } else if (component.type == GeneticTreeComponent.NODE) {
+            } else if (component.type == Config.NODE) {
                 final GeneticTreeNode node = (GeneticTreeNode) component;
                 final Function oldFunction = node.getFunction(), newFunction = Helper.getRandomFunction();
 
@@ -132,7 +126,7 @@ public class Genome {
     public void iterateTree(GeneticTreeComponent component, List<GeneticTreeComponent> componentList){
         componentList.add(component);
 
-        if (component.type == GeneticTreeComponent.NODE) {
+        if (component.type == Config.NODE) {
             final List<GeneticTreeComponent> children = ((GeneticTreeNode) component).getChildren();
             for (int i = 0, c = children.size(); i < c; i++) {
                 iterateTree(children.get(i), componentList);

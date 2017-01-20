@@ -1,6 +1,7 @@
 package tree;
 
 import functions.Function;
+import help.Config;
 import help.Helper;
 import terminals.IOTerminalSet;
 import terminals.Terminal;
@@ -8,14 +9,13 @@ import terminals.Terminal;
 import java.util.ArrayList;
 import java.util.List;
 
+import static help.Config.MODE_FULL;
+import static help.Config.MODE_GROW;
+
 /**
  * Created by Nils on 10.01.2017.
  */
 public class GeneticTree {
-    public static final int MODE_FULL = 1;
-    public static final int MODE_GROW = 2;
-    public static final int MODE_HALF = 3;
-
     public final int maxDepth;
     public final int buildMode;
 
@@ -110,7 +110,7 @@ public class GeneticTree {
         final List<GeneticTreeComponent> srcChildren = src.getChildren();
 
         for (GeneticTreeComponent srcChild : srcChildren) {
-            if (srcChild.type == GeneticTreeComponent.NODE) {
+            if (srcChild.type == Config.NODE) {
                 final GeneticTreeNode srcNode = (GeneticTreeNode) srcChild;
                 final GeneticTreeNode dstNode = new GeneticTreeNode(srcNode, dst);
 
@@ -128,7 +128,7 @@ public class GeneticTree {
         if (node.level == x) for (GeneticTreeComponent child : children) {
             if (child.type == componentType) list.add(child);
         } else if (node.level < x) for (GeneticTreeComponent child : children) {
-            if (child.type == GeneticTreeComponent.NODE) getLevel(level, componentType, (GeneticTreeNode) child, list);
+            if (child.type == Config.NODE) getLevel(level, componentType, (GeneticTreeNode) child, list);
         }
     }
 
@@ -137,7 +137,7 @@ public class GeneticTree {
 
         final List<GeneticTreeComponent> levelList = new ArrayList<>();
 
-        getLevel(level, GeneticTreeComponent.NODE, root, levelList);
+        getLevel(level, Config.NODE, root, levelList);
 
         final int size = levelList.size();
         return size < 1 ? null : (GeneticTreeNode) levelList.get(Helper.rand(0, levelList.size()));

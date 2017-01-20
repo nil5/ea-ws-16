@@ -1,6 +1,8 @@
 package tree;
 
 
+import help.Config;
+
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -12,7 +14,7 @@ public class TreeCalcVisitor implements TreeVisitor<Double> {
 
     @Override
     public Double visitComponent(GeneticTreeComponent component) {
-        if (component.type == GeneticTreeComponent.NODE) {
+        if (component.type == Config.NODE) {
             final GeneticTreeNode node = (GeneticTreeNode) component;
             final List<GeneticTreeComponent> children = node.getChildren();
             final int childrenSize = children.size();

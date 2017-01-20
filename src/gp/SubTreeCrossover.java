@@ -1,5 +1,6 @@
 package gp;
 
+import help.Config;
 import tree.GeneticTreeNode;
 
 /**
@@ -8,10 +9,10 @@ import tree.GeneticTreeNode;
 public class SubTreeCrossover extends Mutator {
     private final Selection selection;
 
-    public SubTreeCrossover(final double mutationRate, final boolean protectBest, final int tournamentSize) {
-        super(2, 2, mutationRate, protectBest);
+    public SubTreeCrossover(final boolean protectBest, final int tournamentSize) {
+        super(2, 2, protectBest);
 
-        this.selection = new TournamentSelection(tournamentSize, protectBest);
+        this.selection = new TournamentSelection(protectBest);
     }
 
     @Override
@@ -19,7 +20,7 @@ public class SubTreeCrossover extends Mutator {
         /*final Gene[] nextGeneration = new Gene[genes.length];
         int nextGenerationIndex = 0;*/
 
-        outer: for (int i = 0; i < mutationRate * genome.length; i++) {
+        outer: for (int i = 0; i < Config.RECOMBINATIONRATE * genome.length; i++) {
             final Gene[] parents = selection.select(genome, inputGeneCount);
             /*final Gene[] children = new Gene[inputGeneCount];*/
             final GeneticTreeNode[] subNodes = new GeneticTreeNode[inputGeneCount];
