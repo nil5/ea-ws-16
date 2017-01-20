@@ -15,18 +15,53 @@ public abstract class GeneticTreeComponent {
     protected GeneticTreeComponent(final GeneticTreeNode parent, final int type) {
         this.type = type;
 
-        setParent(parent);
+        addParent(parent);
     }
 
-    public void setParent(GeneticTreeNode parent) {
+    public boolean setParent(final GeneticTreeNode parent) {
+        boolean success = removeParent();
+        //TODO
+    }
+
+    private boolean removeParent() {
+        if (parent != null) {
+            if(!parent.removeChild(this)) return false;
+            parent = null;
+        } return true;
+    }
+
+    private boolean addParent(final GeneticTreeNode parent) {
+        if (parent != null) {
+            if (!parent.addChild(this)) return false;
+        }
+
         this.parent = parent;
 
+        return true;
+    }
+
+    private void updateLevel() {
+        GeneticTreeNode parent = this.parent;
         level = 0;
 
         while (parent != null) {
             level++;
             parent = parent.parent;
         }
+    }
+
+    public boolean swapParents(final GeneticTreeComponent component) {
+        final GeneticTreeNode leftParent = this.parent;
+        final GeneticTreeNode rightParent = component.parent;
+
+        removeParent();
+        component.removeParent();
+
+
+    }
+
+    public GeneticTreeNode getParent() {
+        return parent;
     }
 
     public int getLevel() {

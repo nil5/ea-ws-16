@@ -5,12 +5,13 @@ import help.Helper;
 import terminals.IOTerminalSet;
 import terminals.Terminal;
 
-import static java.lang.Double.NaN;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Nils on 10.01.2017.
  */
-public class GeneticTree implements Comparable<GeneticTree> {
+public class GeneticTree {
     public static final int MODE_FULL = 1;
     public static final int MODE_GROW = 2;
     public static final int MODE_HALF = 3;
@@ -18,10 +19,20 @@ public class GeneticTree implements Comparable<GeneticTree> {
     public final int maxDepth;
     public final int buildMode;
 
-    private GeneticTreeNode root;
-    private IOTerminalSet testTerminal;
+    protected final IOTerminalSet testTerminal;
+
+    protected GeneticTreeNode root;
+
     private int testTerminalInputCount = 0;
-    private double fitness;
+
+    protected GeneticTree(final GeneticTree tree) {
+        maxDepth = tree.maxDepth;
+        buildMode = tree.buildMode;
+        testTerminal = tree.testTerminal;
+        root = new GeneticTreeNode(null, tree.root.getFunction());
+
+        copyTree(tree.root, root);
+    }
 
     public GeneticTree(final IOTerminalSet testTerminal) {
         this(testTerminal, 2);
@@ -45,8 +56,6 @@ public class GeneticTree implements Comparable<GeneticTree> {
                 generateGrowTree(root);
                 break;
         }
-
-        updateFitness();
     }
 
     private void generateFullTree(final GeneticTreeNode node) {
@@ -55,7 +64,6 @@ public class GeneticTree implements Comparable<GeneticTree> {
         if (node.getLevel() < maxDepth - 1) {
             for (int i = 0; i < numChildren; i++) {
                 final GeneticTreeNode child = new GeneticTreeNode(node, Helper.getRandomFunction());
-                node.addChild(child);
                 generateFullTree(child);
             }
         } else {
@@ -68,7 +76,7 @@ public class GeneticTree implements Comparable<GeneticTree> {
                     testTerminalInputCount++;
                 } else terminal = Helper.getRandomTerminal();
 
-                node.addChild(new GeneticTreeLeaf(node, terminal));
+                new GeneticTreeLeaf(node, terminal);
             }
         }
     }
@@ -82,29 +90,59 @@ public class GeneticTree implements Comparable<GeneticTree> {
                 final Object obj = Helper.getRandomObject();
 
                 try {
-                    final GeneticTreeNode child = new GeneticTreeNode(node, (Function) obj);
-                    node.addChild(child);
+                    final Function function = (Function) obj;
+                    final GeneticTreeNode child = new GeneticTreeNode(node, function);
+
                     generateGrowTree(child);
                 } catch (ClassCastException e) {
-                    node.addChild(new GeneticTreeLeaf(node, (Terminal) obj));
+                    new GeneticTreeLeaf(node, (Terminal) obj);
                 }
             }
         } else {
             for (int i = 0; i < numChildren; i++) {
                 // Jedes Blatt einmal verwenden oder sogar der Reihe nach?
-                node.addChild(new GeneticTreeLeaf(node, Helper.getRandomTerminal()));
+                new GeneticTreeLeaf(node, Helper.getRandomTerminal());
             }
         }
     }
 
-    public void updateFitness() {
-        final TreeCalcVisitor v = new TreeCalcVisitor();
-        root.accept(v);
-        fitness = Math.abs(v.getResult() - testTerminal.output.getValue());
+    private void copyTree(final GeneticTreeNode src, final GeneticTreeNode dst) {
+        final List<GeneticTreeComponent> srcChildren = src.getChildren();
+
+        for (GeneticTreeComponent srcChild : srcChildren) {
+            if (srcChild.type == GeneticTreeComponent.NODE) {
+                final GeneticTreeNode srcNode = (GeneticTreeNode) srcChild;
+                final GeneticTreeNode dstNode = new GeneticTreeNode(srcNode, dst);
+
+                copyTree(srcNode, dstNode);
+            } else {
+                new GeneticTreeLeaf((GeneticTreeLeaf) srcChild, dst);
+            }
+        }
     }
 
-    public double getFitness() {
-        return fitness;
+    private void getLevel(final int level, final int componentType, final GeneticTreeNode node,
+                          final List<GeneticTreeComponent> list) {
+        final int x = level - 1;
+        final List<GeneticTreeComponent> children = node.getChildren();
+        if (node.level == x) for (GeneticTreeComponent child : children) {
+            if (child.type == componentType) list.add(child);
+        } else if (node.level < x) for (GeneticTreeComponent child : children) {
+            if (child.type == GeneticTreeComponent.NODE) getLevel(level, componentType, (GeneticTreeNode) child, list);
+        }
+    }
+
+    public GeneticTreeNode getRandomSubNode() {
+        return getRandomSubNode(Helper.rand(1, maxDepth));
+    }
+
+    public GeneticTreeNode getRandomSubNode(final int level) {
+        final List<GeneticTreeComponent> levelList = new ArrayList<>();
+
+        getLevel(level, GeneticTreeComponent.NODE, root, levelList);
+
+        final int size = levelList.size();
+        return size < 1 ? null : (GeneticTreeNode) levelList.get(Helper.rand(0, levelList.size()));
     }
 
     public GeneticTreeNode getRoot() {
@@ -113,14 +151,5 @@ public class GeneticTree implements Comparable<GeneticTree> {
 
     public void print() {
         root.accept(new TreePrintVisitor());
-    }
-
-    @Override
-    public int compareTo(GeneticTree o) {
-        final boolean nan1 = Double.isNaN(fitness), nan2 = Double.isNaN(o.fitness);
-        if (nan1 && nan2) return 0;
-        if (nan1 || fitness > o.fitness) return 1;
-        if (nan2 || o.fitness > fitness) return -1;
-        return 0;
     }
 }

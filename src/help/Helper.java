@@ -29,7 +29,7 @@ public class Helper {
 
     public static Terminal getRandomTerminal() {
         try {
-            return terminalSet[ThreadLocalRandom.current().nextInt(0, terminalSet.length)];
+            return terminalSet[rand(0, terminalSet.length)];
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -39,7 +39,7 @@ public class Helper {
 
     public static Function getRandomFunction() {
         try {
-            return functionSet[ThreadLocalRandom.current().nextInt(0, functionSet.length)];
+            return functionSet[rand(0, functionSet.length)];
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -48,7 +48,11 @@ public class Helper {
     }
 
     public static Object getRandomObject() {
-        final int r = ThreadLocalRandom.current().nextInt(0, functionSet.length + terminalSet.length);
+        final int r = rand(0, functionSet.length + terminalSet.length);
         return r < functionSet.length ? functionSet[r] : terminalSet[r - functionSet.length];
+    }
+
+    public static int rand(final int min, final int max) {
+        return ThreadLocalRandom.current().nextInt(min, max);
     }
 }

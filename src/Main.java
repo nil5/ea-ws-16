@@ -1,12 +1,12 @@
-import genome.Genome;
+import gp.Evolution;
+import gp.Genome;
 import io.CSVUtils;
 import terminals.IOTerminalSet;
 import tree.GeneticTree;
-import tree.TreePrintVisitor;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by Nils on 10.01.2017.
@@ -51,13 +51,17 @@ public class Main {
 
         for (int i = 0; i < lineCount; i++) testTerminals[i] = new IOTerminalSet(values.get(i));
 
-        Genome genome = new Genome(GeneticTree.MODE_HALF, testTerminals,2,1,0.9);
-        genome.mutate();
+        Genome genome = new Genome(GeneticTree.MODE_HALF, testTerminals,2,1,0.9, true);
 
         for (int i = 0; i < lineCount; i++) {
             final List<String> line = values.get(i);
 
             System.out.println("Line " + (i + 1) + ": " + line.get(0) + " => " + line.get(1));
         }
+
+        final Evolution evolution = new Evolution(genome);
+        final Thread evolutionThread = new Thread(evolution);
+
+        evolutionThread.start();
     }
 }

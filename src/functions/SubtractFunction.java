@@ -9,7 +9,7 @@ public class SubtractFunction extends Function {
         this(2);
     }
     public SubtractFunction(final int numParams) {
-        super("Add", numParams);
+        super("Subtract", numParams);
     }
 
     @Override
