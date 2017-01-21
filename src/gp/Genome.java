@@ -19,8 +19,8 @@ public class Genome {
     public final int length;
 
     private Gene[] genes;
-    private double bestGeneFitness;
-    private int bestGeneIndex;
+    private double bestGeneFitness = Double.MAX_VALUE;
+    private int bestGeneIndex = -1;
 
 
     public Genome(final int buildMode, final int length) {
@@ -56,6 +56,8 @@ public class Genome {
     }
 
     public void updateBestGeneIndex() {
+        bestGeneFitness = Double.MAX_VALUE;
+        bestGeneIndex = -1;
         for (int i = 0; i < genes.length; i++) {
             updateBestGeneIndex(i);
         }
@@ -63,9 +65,16 @@ public class Genome {
 
     public void updateBestGeneIndex(final int index) {
         final double fitness = genes[index].getFitness();
-        if (fitness < bestGeneFitness) {
+        if (!Double.isNaN(fitness) && fitness < bestGeneFitness) {
             bestGeneFitness = fitness;
             bestGeneIndex = index;
         }
+    }
+
+    @Override
+    public String toString() {
+        String s = "GENOME: Best Gene at index " + bestGeneIndex + " with fitness " + bestGeneFitness + "\n";
+        for (final Gene g : genes) s += g.toString() + "\n";
+        return s;
     }
 }

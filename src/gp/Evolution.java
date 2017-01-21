@@ -21,8 +21,8 @@ public class Evolution implements Runnable {
             mutation.mutate(genome);
             crossover.mutate(genome);
 
-            final Gene fittest = genome.get(genome.getBestGeneIndex());
-            System.out.println(fittest);
+            //final Gene fittest = genome.get(genome.getBestGeneIndex());
+            System.out.println(genome);
         }
     }
 }

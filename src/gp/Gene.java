@@ -15,7 +15,7 @@ public class Gene extends GeneticTree implements Comparable<Gene> {
 
     public final int id = idCounter++;
 
-    private double fitness = 0;
+    private double fitness = Double.NaN;
 
     public Gene(final Gene gene) {
         super(gene);
@@ -34,7 +34,7 @@ public class Gene extends GeneticTree implements Comparable<Gene> {
         final List<InputTerminal> inputTerminals = getInputs();
         final int inputSize = inputTerminals.size();
 
-        fitness = 0;
+        fitness = Double.NaN;
 
         if (ioSets == null || ioSets.length < 1) {
             System.out.println("NO IO SETS FOUND: The ioSets array is empty.");
@@ -45,6 +45,8 @@ public class Gene extends GeneticTree implements Comparable<Gene> {
             System.out.println("INVALID TREE: No of input terminals does not equal number of inputs.");
             return;
         }
+
+        fitness = 0;
 
         for (final IOTerminalSet ioSet : ioSets) {
             final TreeCalcVisitor v = new TreeCalcVisitor();

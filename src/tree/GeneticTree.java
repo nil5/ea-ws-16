@@ -160,7 +160,7 @@ public class GeneticTree {
     public String toString() {
         final TreeToStringVisitor v = new TreeToStringVisitor();
         root.accept(v);
-        return v.getResult();
+        return "TREE: " + numInputs + " inputs\n" + v.getResult();
     }
 
 }
