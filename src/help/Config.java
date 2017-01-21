@@ -28,4 +28,7 @@ public final class Config {
 
     public static final int THREADCOUNT = 1;
 
+    public static final double MIN = -5.0;
+    public static final double MAX = 5.0;
+
 }

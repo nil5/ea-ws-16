@@ -39,7 +39,7 @@ public class Helper {
     }
 
     public static Terminal getRandomTerminal() {
-        return new RandomTerminal(-5.0, 5.0);
+        return new RandomTerminal(Config.MIN, Config.MAX);
     }
 
     public static Object getRandomObject() {

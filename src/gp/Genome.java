@@ -39,6 +39,7 @@ public class Genome {
         // Debugging
         for (Gene gene : genes) {
             System.out.println(gene.toString() + "\nTree result: " + gene.getFitness());
+            System.out.println("Tree function: " + gene.getFunction());
         }
     }
 

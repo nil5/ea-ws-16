@@ -53,6 +53,11 @@ public class RandomMutator extends Mutator {
                 final GeneticTreeLeaf leaf = (GeneticTreeLeaf) component;
                 final Terminal oldTerminal = leaf.getTerminal(), newTerminal = Helper.getRandomTerminal();
 
+                if (oldTerminal.getType() == Config.INPUT) {
+                    System.out.println("Failed to mutate. Input leafs are not allowed.");
+                    continue;
+                }
+
                 leaf.setTerminal(newTerminal);
 
                 //System.out.println("Mutated leaf " + oldTerminal.getValue() + " to " + newTerminal.getValue());

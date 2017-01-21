@@ -77,4 +77,6 @@ public abstract class GeneticTreeComponent {
 
     @Override
     public abstract String toString();
+
+    public abstract String get();
 }

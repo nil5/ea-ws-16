@@ -48,4 +48,8 @@ public class GeneticTreeNode extends GeneticTreeComponent {
     public String toString() {
         return "NODE level " + level + ", function: " + function;
     }
+
+    public String get(){
+        return function.get(this);
+    }
 }

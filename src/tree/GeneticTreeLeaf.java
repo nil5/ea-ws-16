@@ -31,4 +31,9 @@ public class GeneticTreeLeaf extends GeneticTreeComponent {
     public String toString() {
         return "LEAF level " + level + ", terminal: " + terminal;
     }
+
+    public String get() {
+        if (terminal.getType() == Config.INPUT) return "x";
+        return terminal.getValue()+"";
+    }
 }
