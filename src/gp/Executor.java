@@ -4,6 +4,9 @@ import help.Config;
 import tree.GeneticTree;
 import tree.GeneticTreeComponent;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -12,23 +15,25 @@ import java.util.concurrent.Executors;
  */
 public class Executor {
     private final ExecutorService executorService;
-    private final Evolution[] evolutions;
+    private final List<Evolution> evolutions;
 
     public Executor(final int numRuns) {
-        this(numRuns, Config.MODE_HALF);
+        this(numRuns, Runtime.getRuntime().availableProcessors());
     }
 
-    public Executor(final int numRuns, final int buildMode) {
-        this(numRuns, buildMode, Runtime.getRuntime().availableProcessors());
-    }
-
-    public Executor(final int numRuns, final int buildMode, final int numThreads) {
+    public Executor(final int numRuns, final int numThreads) {
         executorService = Executors.newFixedThreadPool(numThreads);
-        evolutions = new Evolution[numRuns];
+        evolutions = new ArrayList<>();
 
         for (int i = 0; i < numRuns; i++) {
-            evolutions[i] = new Evolution(new Genome(buildMode, 100));
-            executorService.execute(evolutions[i]);
+            evolutions.add(new Evolution(new Genome(Config.MODE_GROW, Config.GENECOUNT)));
+        }
+
+        try {
+            executorService.invokeAll(evolutions);
+            System.out.println("DONE");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }

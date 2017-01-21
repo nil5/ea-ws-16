@@ -65,7 +65,7 @@ public class RandomMutator extends Mutator {
 
                     //System.out.println("Mutated node " + oldFunction.toString() + " to " + newFunction.toString());
                 } else {
-                    System.out.println("Couldn't mutate node because Functions have different number of Params");
+                    //System.out.println("Couldn't mutate node because Functions have different number of Params");
                 }
             }
 

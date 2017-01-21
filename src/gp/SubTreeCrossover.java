@@ -12,6 +12,7 @@ import java.util.List;
  * Created by Nils on 19.01.2017.
  */
 public class SubTreeCrossover extends Mutator {
+    private final boolean D = false;
     private final Selection selection;
 
     public SubTreeCrossover(final double mutationRate, final boolean protectBest, final int tournamentSize) {
@@ -32,19 +33,21 @@ public class SubTreeCrossover extends Mutator {
                 parents[j] = gene;
             }
 
-            System.out.println("==========  SUBTREE CROSSOVER  ==========");
+            if (D) System.out.println("==========  SUBTREE CROSSOVER  ==========");
 
             for (int j = 0, subNodeLevel = -1; j < parents.length; j++) {
                 subNodes[j] = parents[j].getRandomSubNode(subNodeLevel);
 
                 if (subNodes[j] == null) {
-                    System.out.println("Failed to do crossover. Did not find an appropriate sub node.");
-                    System.out.println(parents[j].toString());
+                    if (D) {
+                        System.out.println("Failed to do crossover. Did not find an appropriate sub node.");
+                        System.out.println(parents[j].toString());
+                    }
                     continue outer;
                 }
 
                 if (hasInputLeaf(subNodes[j])) {
-                    System.out.println("Failed to do crossover. Input leafs are not allowed.");
+                    if (D) System.out.println("Failed to do crossover. Input leafs are not allowed.");
                     continue outer;
                 }
 
@@ -52,19 +55,21 @@ public class SubTreeCrossover extends Mutator {
             }
 
             for (int j = 0, k = j + 1; k < parents.length; j++, k++) {
-                System.out.println(parents[j].toString() + "\n" + parents[k].toString());
+                if (D) System.out.println(parents[j].toString() + "\n" + parents[k].toString());
 
                 subNodes[j].swapParents(subNodes[k]);
 
-                System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+                if (D) System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
                 parents[j].updateFitness();
                 parents[k].updateFitness();
 
                 genome.updateBestGeneIndex();
 
-                System.out.println(parents[j].toString() + "\n" + parents[k].toString());
-                System.out.println("---------------------------------------------------------------------------");
+                if (D) {
+                    System.out.println(parents[j].toString() + "\n" + parents[k].toString());
+                    System.out.println("---------------------------------------------------------------------------");
+                }
             }
         }
     }
