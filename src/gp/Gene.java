@@ -41,18 +41,13 @@ public class Gene extends GeneticTree implements Comparable<Gene> {
             return;
         }
 
-        if (inputSize != ioSets[0].inputs.length) {
-            System.out.println("INVALID TREE: No of input terminals does not equal number of inputs.");
-            return;
-        }
-
         fitness = 0;
 
         for (final IOTerminalSet ioSet : ioSets) {
             final TreeCalcVisitor v = new TreeCalcVisitor();
 
             for (int i = 0; i < inputSize; i++) {
-                inputTerminals.get(i).setValue(ioSet.inputs[i].getValue());
+                inputTerminals.get(i).setValue(ioSet.inputs[i % ioSets[0].inputs.length].getValue());
             }
 
             root.accept(v);

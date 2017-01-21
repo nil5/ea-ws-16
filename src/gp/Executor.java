@@ -26,7 +26,7 @@ public class Executor {
         evolutions = new ArrayList<>();
 
         for (int i = 0; i < numRuns; i++) {
-            evolutions.add(new Evolution(new Genome(Config.MODE_GROW, Config.GENECOUNT)));
+            evolutions.add(new Evolution(new Genome(Config.INIT, Config.GENECOUNT)));
         }
 
         try {

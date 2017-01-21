@@ -40,7 +40,7 @@ public class GeneticTree {
     }
 
     public GeneticTree(final int maxDepth, final int buildMode) {
-        this(maxDepth, buildMode, 1);
+        this(maxDepth, buildMode, 3);
     }
 
     public GeneticTree(final int maxDepth, final int buildMode, final int numInputs) {
@@ -58,6 +58,8 @@ public class GeneticTree {
                 generateGrowTree(root);
                 break;
         }
+
+        addInputTerminals(numInputs);
     }
 
     private void generateFullTree(final GeneticTreeNode node) {
@@ -101,14 +103,16 @@ public class GeneticTree {
     }
 
     private void addLeaf(final GeneticTreeNode node, Terminal terminal) {
-        final int inputSize = inputs.size();
-
-        if (inputSize < numInputs) {
-            terminal = new InputTerminal();
-            inputs.add((InputTerminal) terminal);
-        } else if (terminal == null) terminal = Helper.getRandomTerminal();
-
+        if (terminal == null) terminal = Helper.getRandomTerminal();
         new GeneticTreeLeaf(node, terminal);
+    }
+
+    private void addInputTerminals(final int numInputs) {
+        for (int i = 0; i < numInputs; i++) {
+            final InputTerminal inputTerminal = new InputTerminal();
+            inputs.add(inputTerminal);
+            root.replaceRandomTerminal(inputTerminal);
+        }
     }
 
     private void copyTree(final GeneticTreeNode src, final GeneticTreeNode dst) {
@@ -165,7 +169,7 @@ public class GeneticTree {
     public String toString() {
         final TreeToStringVisitor v = new TreeToStringVisitor();
         root.accept(v);
-        return "TREE: " + numInputs + " inputs\n" + v.getResult();
+        return "TREE: " + numInputs + " inputs\n" + v.getResult() + "\n" + getFunction();
     }
 
 }

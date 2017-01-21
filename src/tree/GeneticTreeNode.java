@@ -2,6 +2,8 @@ package tree;
 
 import functions.Function;
 import help.Config;
+import help.Helper;
+import terminals.Terminal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +45,12 @@ public class GeneticTreeNode extends GeneticTreeComponent {
     }
 
     public void setFunction(Function function) {this.function = function;}
+
+    public void replaceRandomTerminal(final Terminal newTerminal) {
+        final GeneticTreeComponent child = children.get(Helper.rand(0, children.size()));
+        if (child.type == Config.NODE) ((GeneticTreeNode) child).replaceRandomTerminal(newTerminal);
+        else ((GeneticTreeLeaf) child).setTerminal(newTerminal);
+    }
 
     @Override
     public String toString() {
