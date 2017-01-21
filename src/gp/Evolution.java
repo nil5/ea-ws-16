@@ -12,12 +12,16 @@ public class Evolution implements Runnable {
 
     @Override
     public void run() {
-        final Mutator crossoverMutator = new SubTreeCrossover(0.9, true, 2);
+        final Mutator mutation = new RandomMutator(0.01, true);
+        final Mutator crossover = new SubTreeCrossover(0.9, true, 2);
 
         for (int i = 0; i < 10; i++) {
-            genome.mutate();
+            mutation.mutate(genome);
+            crossover.mutate(genome);
 
-            crossoverMutator.mutate(genome);
+            final Gene fittest = genome.get(genome.getBestGeneIndex());
+            System.out.println(fittest);
+            fittest.print();
         }
     }
 }

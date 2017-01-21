@@ -1,5 +1,6 @@
 package gp;
 
+import help.Helper;
 import terminals.IOTerminalSet;
 import tree.GeneticTree;
 import tree.TreeCalcVisitor;
@@ -20,25 +21,24 @@ public class Gene extends GeneticTree implements Comparable<Gene> {
         fitness = gene.fitness;
     }
 
-    public Gene(final IOTerminalSet testTerminal) {
-        this(testTerminal, 2);
-    }
-
-    public Gene(final IOTerminalSet testTerminal, final int maxDepth) {
-        this(testTerminal, maxDepth, GeneticTree.MODE_HALF);
-    }
-
-    public Gene(final IOTerminalSet testTerminal, final int maxDepth, final int buildMode) {
-        super(testTerminal, maxDepth, buildMode);
+    public Gene(final int maxDepth, final int buildMode) {
+        super(maxDepth, buildMode);
 
         updateFitness();
     }
 
 
     public void updateFitness() {
-        final TreeCalcVisitor v = new TreeCalcVisitor();
-        root.accept(v);
-        fitness = Math.abs(v.getResult() - testTerminal.output.getValue());
+        fitness = 0;
+
+        final IOTerminalSet[] ioSets = Helper.getIOSets();
+
+        for (int i = 0; i < ioSets.length; i++) {
+            final TreeCalcVisitor v = new TreeCalcVisitor();
+
+            root.accept(v);
+            fitness += Math.abs(v.getResult() - ioSets[i].output.getValue());
+        }
     }
 
     public double getFitness() {

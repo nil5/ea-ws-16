@@ -1,10 +1,14 @@
 package help;
 
 import functions.*;
+import io.CSVUtils;
 import terminals.ConstantTerminal;
+import terminals.IOTerminalSet;
 import terminals.RandomTerminal;
 import terminals.Terminal;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -26,6 +30,8 @@ public class Helper {
             new RandomTerminal(-5.0, 5.0),
             new RandomTerminal(-5.0, 5.0)
     };
+
+    private static IOTerminalSet[] inputOutputSets = null;
 
     public static Terminal getRandomTerminal() {
         try {
@@ -50,6 +56,32 @@ public class Helper {
     public static Object getRandomObject() {
         final int r = rand(0, functionSet.length + terminalSet.length);
         return r < functionSet.length ? functionSet[r] : terminalSet[r - functionSet.length];
+    }
+
+    public static IOTerminalSet[] getIOSets() {
+        if (inputOutputSets == null) {
+            final List<List<String>> values;
+
+            try {
+                values = CSVUtils.parseFile("values.csv");
+            } catch (IOException e) {
+                System.out.println("Could not read values file.");
+                e.printStackTrace();
+                return null;
+            }
+
+            inputOutputSets = new IOTerminalSet[values.size()];
+
+            for (int i = 0; i < inputOutputSets.length; i++) {
+                final List<String> line = values.get(i);
+
+                inputOutputSets[i] = new IOTerminalSet(line);
+
+                System.out.println("Line " + (i + 1) + ": " + line.get(0) + " => " + line.get(1));
+            }
+        }
+
+        return inputOutputSets;
     }
 
     public static int rand(final int min, final int max) {

@@ -16,27 +16,15 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class Genome {
     public final int length;
-    public final int maxTreeDepth;
-    public final boolean protectBest;
-    private double recombinationRate;
-    private double mutationRate;
-    private double fitness = 0;
 
-    private IOTerminalSet[] testTerminalSets;
     private Gene[] genes;
 
     private double bestGeneFitness;
     private int bestGeneIndex;
 
 
-    public Genome(final int buildMode, final IOTerminalSet[] testTerminalSets, final int maxTreeDepth,
-                  final double mutationRate, final double recombinationRate, final boolean protectBest) {
-        this.testTerminalSets = testTerminalSets;
-        this.length = testTerminalSets.length;
-        this.maxTreeDepth = maxTreeDepth;
-        this.mutationRate = mutationRate;
-        this.recombinationRate = recombinationRate;
-        this.protectBest = protectBest;
+    public Genome(final int buildMode, final int length) {
+        this.length = length;
         this.genes = new Gene[length];
 
         int i = 0;
@@ -48,7 +36,7 @@ public class Genome {
 
         updateBestGeneIndex();
 
-        System.out.println("Genome fitness: " + fitness);
+        // Debugging
         for (Gene gene : genes) {
             gene.print();
             System.out.println("Tree result: " + gene.getFitness());
@@ -69,75 +57,8 @@ public class Genome {
         fitness += gene.getFitness();
     }
 
-    public void mutate() {
-        mutate(false);
-    }
-
-    public void mutate(final boolean sortBefore) {
-        final int mutationCount = (int) (length * mutationRate);
-
-        System.out.println("Performing " + mutationCount + " mutations");
-
-        if (sortBefore) Arrays.sort(genes);
-
-        for (int i = 0; i < mutationCount; i++) {
-            final int geneIndex = ThreadLocalRandom.current().nextInt(0, length);
-            final GeneticTreeComponent root = genes[geneIndex].getRoot();
-            final List<GeneticTreeComponent> components = new ArrayList<>();
-
-            System.out.println("Mutate Tree Nr: " + geneIndex);
-
-            iterateTree(root, components);
-
-            final int componentsSize = components.size();
-            final int componentNo = ThreadLocalRandom.current().nextInt(0, componentsSize);
-
-            System.out.println("Mutate Compontant Nr: " + componentNo);
-
-            final GeneticTreeComponent component = components.get(componentNo);
-            if (component.type == GeneticTreeComponent.LEAF) {
-                final GeneticTreeLeaf leaf = (GeneticTreeLeaf) component;
-                final Terminal oldTerminal = leaf.getTerminal(), newTerminal = Helper.getRandomTerminal();
-
-                leaf.setTerminal(newTerminal);
-
-                System.out.println("Mutated leaf " + oldTerminal.getValue() + " to " + newTerminal.getValue());
-            } else if (component.type == GeneticTreeComponent.NODE) {
-                final GeneticTreeNode node = (GeneticTreeNode) component;
-                final Function oldFunction = node.getFunction(), newFunction = Helper.getRandomFunction();
-
-                if (oldFunction.numParams == newFunction.numParams) {
-                    node.setFunction(newFunction);
-
-                    System.out.println("Mutated node " + oldFunction.toString() + " to " + newFunction.toString());
-                } else {
-                    System.out.println("Couldn't mutate node because Functions have different number of Params");
-                }
-            }
-
-            genes[geneIndex].updateFitness();
-
-            final double fitness = genes[geneIndex].getFitness();
-            if (!Double.isNaN(fitness) && fitness < bestGeneFitness) {
-                bestGeneIndex = geneIndex;
-                bestGeneFitness = fitness;
-            }
-        }
-    }
-
-    public void crossover() {
-
-    }
-
-    public void iterateTree(GeneticTreeComponent component, List<GeneticTreeComponent> componentList){
-        componentList.add(component);
-
-        if (component.type == GeneticTreeComponent.NODE) {
-            final List<GeneticTreeComponent> children = ((GeneticTreeNode) component).getChildren();
-            for (int i = 0, c = children.size(); i < c; i++) {
-                iterateTree(children.get(i), componentList);
-            }
-        }
+    public int getBestGeneIndex() {
+        return bestGeneIndex;
     }
 
     public void sort() {
@@ -146,18 +67,16 @@ public class Genome {
     }
 
     private void updateBestGeneIndex() {
-        int index = -1;
-        double minFitness = Double.MAX_VALUE;
-
         for (int i = 0; i < genes.length; i++) {
-            final double fitness = genes[i].getFitness();
-            if (fitness < minFitness) {
-                minFitness = fitness;
-                index = i;
-            }
+            updateBestGeneIndex(i);
         }
+    }
 
-        bestGeneFitness = minFitness;
-        bestGeneIndex = index;
+    public void updateBestGeneIndex(final int index) {
+        final double fitness = genes[index].getFitness();
+        if (fitness < bestGeneFitness) {
+            bestGeneFitness = fitness;
+            bestGeneIndex = index;
+        }
     }
 }

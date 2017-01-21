@@ -17,9 +17,8 @@ public class GeneticTree {
     public static final int MODE_HALF = 3;
 
     public final int maxDepth;
+    public final int numInputs;
     public final int buildMode;
-
-    protected final IOTerminalSet testTerminal;
 
     protected GeneticTreeNode root;
 
@@ -28,7 +27,7 @@ public class GeneticTree {
     protected GeneticTree(final GeneticTree tree) {
         maxDepth = tree.maxDepth;
         buildMode = tree.buildMode;
-        testTerminal = tree.testTerminal;
+        numInputs = tree.numInputs;
         root = new GeneticTreeNode(null, tree.root.getFunction());
 
         copyTree(tree.root, root);

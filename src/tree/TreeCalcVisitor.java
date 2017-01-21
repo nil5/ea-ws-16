@@ -2,7 +2,6 @@ package tree;
 
 
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Created by Nils on 18.01.2017.
