@@ -26,23 +26,7 @@ public class Helper {
             new ExpFunction()
     };
 
-    public static final Terminal[] terminalSet = new RandomTerminal[] {
-            new RandomTerminal(-5.0, 5.0),
-            new RandomTerminal(-5.0, 5.0),
-            new RandomTerminal(-5.0, 5.0)
-    };
-
     private static IOTerminalSet[] inputOutputSets = null;
-
-    public static Terminal getRandomTerminal() {
-        try {
-            return terminalSet[rand(0, terminalSet.length)];
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
 
     public static Function getRandomFunction() {
         try {
@@ -54,9 +38,12 @@ public class Helper {
         return null;
     }
 
+    public static Terminal getRandomTerminal() {
+        return new RandomTerminal(-5.0, 5.0);
+    }
+
     public static Object getRandomObject() {
-        final int r = rand(0, functionSet.length + terminalSet.length);
-        return r < functionSet.length ? functionSet[r] : terminalSet[r - functionSet.length];
+        return rand(0, 1) == 0 ? functionSet[rand(0, functionSet.length)] : getRandomTerminal();
     }
 
     public static IOTerminalSet[] getIOSets() {

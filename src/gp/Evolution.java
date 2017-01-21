@@ -17,7 +17,7 @@ public class Evolution implements Runnable {
         final Mutator mutation = new RandomMutator(Config.MUTATIONRATE, Config.PROTECT_BEST);
         final Mutator crossover = new SubTreeCrossover(Config.RECOMBINATIONRATE, Config.PROTECT_BEST, Config.TOURNAMENTSIZE);
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < Config.GENERATIONCOUNT; i++) {
             mutation.mutate(genome);
             crossover.mutate(genome);
 
