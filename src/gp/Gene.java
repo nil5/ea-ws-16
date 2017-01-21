@@ -2,8 +2,10 @@ package gp;
 
 import help.Helper;
 import terminals.IOTerminalSet;
-import tree.GeneticTree;
-import tree.TreeCalcVisitor;
+import terminals.InputTerminal;
+import tree.*;
+
+import java.util.List;
 
 /**
  * Created by Nils on 19.01.2017.
@@ -11,9 +13,9 @@ import tree.TreeCalcVisitor;
 public class Gene extends GeneticTree implements Comparable<Gene> {
     private static int idCounter = 1;
 
-    private final int id = idCounter++;
+    public final int id = idCounter++;
 
-    private double fitness;
+    private double fitness = 0;
 
     public Gene(final Gene gene) {
         super(gene);
@@ -27,19 +29,35 @@ public class Gene extends GeneticTree implements Comparable<Gene> {
         updateFitness();
     }
 
-
     public void updateFitness() {
+        final IOTerminalSet[] ioSets = Helper.getIOSets();
+        final List<InputTerminal> inputTerminals = getInputs();
+        final int inputSize = inputTerminals.size();
+
         fitness = 0;
 
-        final IOTerminalSet[] ioSets = Helper.getIOSets();
+        if (ioSets == null || ioSets.length < 1) {
+            System.out.println("NO IO SETS FOUND: The ioSets array is empty.");
+            return;
+        }
 
-        for (int i = 0; i < ioSets.length; i++) {
+        if (inputSize != ioSets[0].inputs.length) {
+            System.out.println("INVALID TREE: No of input terminals does not equal number of inputs.");
+            return;
+        }
+
+        for (final IOTerminalSet ioSet : ioSets) {
             final TreeCalcVisitor v = new TreeCalcVisitor();
 
+            for (int i = 0; i < inputSize; i++) {
+                inputTerminals.get(i).setValue(ioSet.inputs[i].getValue());
+            }
+
             root.accept(v);
-            fitness += Math.abs(v.getResult() - ioSets[i].output.getValue());
+            fitness += Math.abs(v.getResult() - ioSet.output.getValue());
         }
     }
+
 
     public double getFitness() {
         return fitness;
@@ -47,7 +65,7 @@ public class Gene extends GeneticTree implements Comparable<Gene> {
 
     @Override
     public String toString() {
-        return "GENE " + id + ": fitness = " + fitness;
+        return "GENE " + id + ": fitness = " + fitness + "\n" + super.toString();
     }
 
     @Override

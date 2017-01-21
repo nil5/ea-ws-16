@@ -18,7 +18,12 @@ public class RandomTerminal implements Terminal {
     }
 
     @Override
+    public int getType() {
+        return 1;
+    }
+
+    @Override
     public String toString() {
-        return "RANDOM Terminal " + value;
+        return "RANDOM Terminal " + getValue();
     }
 }

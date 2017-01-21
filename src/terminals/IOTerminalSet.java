@@ -1,12 +1,11 @@
 package terminals;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Nils on 19.01.2017.
  */
-public class IOTerminalSet {
+public class IOTerminalSet implements Terminal {
     public final int inputCount;
     public final Terminal output;
     public final Terminal[] inputs;
@@ -20,5 +19,20 @@ public class IOTerminalSet {
 
     public Terminal getInputTerminal(final int index) {
         return inputs[index];
+    }
+
+    @Override
+    public double getValue() {
+        return output.getValue();
+    }
+
+    @Override
+    public int getType() {
+        return 3;
+    }
+
+    @Override
+    public String toString() {
+        return "IO Terminal set " + getValue();
     }
 }

@@ -1,5 +1,7 @@
 package gp;
 
+import help.Config;
+
 /**
  * Created by Nils on 19.01.2017.
  */
@@ -12,8 +14,8 @@ public class Evolution implements Runnable {
 
     @Override
     public void run() {
-        final Mutator mutation = new RandomMutator(0.01, true);
-        final Mutator crossover = new SubTreeCrossover(0.9, true, 2);
+        final Mutator mutation = new RandomMutator(Config.MUTATIONRATE, Config.PROTECT_BEST);
+        final Mutator crossover = new SubTreeCrossover(Config.RECOMBINATIONRATE, Config.PROTECT_BEST, Config.TOURNAMENTSIZE);
 
         for (int i = 0; i < 10; i++) {
             mutation.mutate(genome);
@@ -21,7 +23,6 @@ public class Evolution implements Runnable {
 
             final Gene fittest = genome.get(genome.getBestGeneIndex());
             System.out.println(fittest);
-            fittest.print();
         }
     }
 }

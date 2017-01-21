@@ -1,5 +1,6 @@
 package gp;
 
+import help.Config;
 import help.Helper;
 
 import java.util.Arrays;
@@ -17,21 +18,20 @@ public class TournamentSelection extends Selection {
     }
 
     @Override
-    public Gene[] select(final Genome genome, final int selectionSize) {
-        final Gene[] selection = new Gene[selectionSize];
-        final int startIndex = protectBest ? 1 : 0;
+    public Gene select(final Genome genome) {
+        final int bestIndex = protectBest ? genome.getBestGeneIndex() : -1;
 
-        for (int i = 0; i < selection.length; i++) {
-            final Gene[] tournament = new Gene[tournamentSize];
+        final Gene[] tournament = new Gene[Config.TOURNAMENTSIZE];
 
-            for (int j = 0; j < tournament.length; j++) {
-                tournament[j] = genome.get(Helper.rand(startIndex, genome.length));
-            }
-
-            Arrays.sort(tournament);
-            selection[i] = tournament[0];
+        for (int j = 0, r = bestIndex; j < tournament.length; j++) {
+            while(r == bestIndex) r = Helper.rand(0, genome.length);
+            tournament[j] = genome.get(r);
         }
 
-        return selection;
+        Arrays.sort(tournament);
+
+        return tournament[0];
     }
+
+
 }

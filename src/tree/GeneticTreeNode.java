@@ -1,6 +1,7 @@
 package tree;
 
 import functions.Function;
+import help.Config;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,13 +14,13 @@ public class GeneticTreeNode extends GeneticTreeComponent {
     private Function function;
 
     public GeneticTreeNode(final GeneticTreeNode node, final GeneticTreeNode parent) {
-        super(parent, GeneticTreeComponent.NODE);
+        super(parent, Config.NODE);
 
         function = node.function;
     }
 
     public GeneticTreeNode(final GeneticTreeNode parent, Function function) {
-        super(parent, GeneticTreeComponent.NODE);
+        super(parent, Config.NODE);
 
         this.function = function;
     }

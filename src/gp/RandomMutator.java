@@ -1,6 +1,7 @@
 package gp;
 
 import functions.Function;
+import help.Config;
 import help.Helper;
 import terminals.Terminal;
 import tree.GeneticTreeComponent;
@@ -48,14 +49,14 @@ public class RandomMutator extends Mutator {
             //System.out.println("Mutate Compontant Nr: " + componentNo);
 
             final GeneticTreeComponent component = components.get(componentNo);
-            if (component.type == GeneticTreeComponent.LEAF) {
+            if (component.type == Config.LEAF) {
                 final GeneticTreeLeaf leaf = (GeneticTreeLeaf) component;
                 final Terminal oldTerminal = leaf.getTerminal(), newTerminal = Helper.getRandomTerminal();
 
                 leaf.setTerminal(newTerminal);
 
                 //System.out.println("Mutated leaf " + oldTerminal.getValue() + " to " + newTerminal.getValue());
-            } else if (component.type == GeneticTreeComponent.NODE) {
+            } else if (component.type == Config.NODE) {
                 final GeneticTreeNode node = (GeneticTreeNode) component;
                 final Function oldFunction = node.getFunction(), newFunction = Helper.getRandomFunction();
 
@@ -76,7 +77,7 @@ public class RandomMutator extends Mutator {
     private static void iterateTree(GeneticTreeComponent component, List<GeneticTreeComponent> componentList){
         componentList.add(component);
 
-        if (component.type == GeneticTreeComponent.NODE) {
+        if (component.type == Config.NODE) {
             final List<GeneticTreeComponent> children = ((GeneticTreeNode) component).getChildren();
             for (int i = 0, c = children.size(); i < c; i++) {
                 iterateTree(children.get(i), componentList);

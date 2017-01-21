@@ -1,6 +1,7 @@
 package gp;
 
 import functions.*;
+import help.Config;
 import help.Helper;
 import terminals.IOTerminalSet;
 import terminals.Terminal;
@@ -18,7 +19,6 @@ public class Genome {
     public final int length;
 
     private Gene[] genes;
-
     private double bestGeneFitness;
     private int bestGeneIndex;
 
@@ -29,32 +29,21 @@ public class Genome {
 
         int i = 0;
 
-        if (buildMode == GeneticTree.MODE_HALF) {
-            for (; i < length / 2; i++) setGene(i, GeneticTree.MODE_FULL);
-            for (; i < length; i++) setGene(i, GeneticTree.MODE_GROW);
-        } else for (; i < length; i++) setGene(i, buildMode);
+        if (buildMode == Config.MODE_HALF) {
+            for (; i < length / 2; i++) genes[i] = new Gene(Config.MAXTREEDEPTH, Config.MODE_FULL);
+            for (; i < length; i++) genes[i] = new Gene(Config.MAXTREEDEPTH, Config.MODE_GROW);
+        } else for (; i < length; i++) genes[i] = new Gene(Config.MAXTREEDEPTH, buildMode);
 
         updateBestGeneIndex();
 
         // Debugging
         for (Gene gene : genes) {
-            gene.print();
-            System.out.println("Tree result: " + gene.getFitness());
+            System.out.println(gene.toString() + "\nTree result: " + gene.getFitness());
         }
     }
 
     public Gene get(final int index) {
         return genes[index];
-    }
-
-    public void setGene(final int index, final int mode) {
-        setGene(index, new Gene(testTerminalSets[index], maxTreeDepth, mode));
-    }
-
-    public void setGene(final int index, final Gene gene) {
-        if (genes[index] != null) fitness -= genes[index].getFitness();
-        genes[index] = gene;
-        fitness += gene.getFitness();
     }
 
     public int getBestGeneIndex() {
@@ -66,7 +55,7 @@ public class Genome {
         bestGeneIndex = 0;
     }
 
-    private void updateBestGeneIndex() {
+    public void updateBestGeneIndex() {
         for (int i = 0; i < genes.length; i++) {
             updateBestGeneIndex(i);
         }

@@ -1,5 +1,6 @@
 package gp;
 
+import help.Config;
 import tree.GeneticTree;
 import tree.GeneticTreeComponent;
 
@@ -14,7 +15,7 @@ public class Executor {
     private final Evolution[] evolutions;
 
     public Executor(final int numRuns) {
-        this(numRuns, GeneticTree.MODE_HALF);
+        this(numRuns, Config.MODE_HALF);
     }
 
     public Executor(final int numRuns, final int buildMode) {

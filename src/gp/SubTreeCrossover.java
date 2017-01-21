@@ -1,6 +1,12 @@
 package gp;
 
+import help.Config;
+import terminals.Terminal;
+import tree.GeneticTreeComponent;
+import tree.GeneticTreeLeaf;
 import tree.GeneticTreeNode;
+
+import java.util.List;
 
 /**
  * Created by Nils on 19.01.2017.
@@ -17,8 +23,14 @@ public class SubTreeCrossover extends Mutator {
     @Override
     public void mutate(Genome genome) {
         outer: for (int i = 0; i < mutationRate * genome.length; i++) {
-            final Gene[] parents = selection.select(genome, inputGeneCount);
+            final Gene[] parents = new Gene[inputGeneCount];
             final GeneticTreeNode[] subNodes = new GeneticTreeNode[inputGeneCount];
+
+            for (int j = 0; j < inputGeneCount; j++) {
+                Gene gene = j == 0 ? null : parents[j - 1];
+                while (hasGene(parents, gene)) gene = selection.select(genome);
+                parents[j] = gene;
+            }
 
             System.out.println("==========  SUBTREE CROSSOVER  ==========");
 
@@ -27,7 +39,12 @@ public class SubTreeCrossover extends Mutator {
 
                 if (subNodes[j] == null) {
                     System.out.println("Failed to do crossover. Did not find an appropriate sub node.");
-                    parents[j].print();
+                    System.out.println(parents[j].toString());
+                    continue outer;
+                }
+
+                if (hasInputLeaf(subNodes[j])) {
+                    System.out.println("Failed to do crossover. Input leafs are not allowed.");
                     continue outer;
                 }
 
@@ -35,21 +52,39 @@ public class SubTreeCrossover extends Mutator {
             }
 
             for (int j = 0, k = j + 1; k < parents.length; j++, k++) {
-                System.out.println(parents[j]); System.out.println(parents[k]);
-
-                parents[j].print(); parents[k].print();
+                System.out.println(parents[j].toString() + "\n" + parents[k].toString());
 
                 subNodes[j].swapParents(subNodes[k]);
 
                 System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-                parents[j].print(); parents[k].print();
 
                 parents[j].updateFitness();
                 parents[k].updateFitness();
 
-                System.out.println(parents[j]); System.out.println(parents[k]);
+                genome.updateBestGeneIndex();
+
+                System.out.println(parents[j].toString() + "\n" + parents[k].toString());
                 System.out.println("---------------------------------------------------------------------------");
             }
         }
+    }
+
+    private static boolean hasInputLeaf(final GeneticTreeNode node) {
+        final List<GeneticTreeComponent> children = node.getChildren();
+        for (GeneticTreeComponent child : children) {
+            if (child.type == Config.LEAF) {
+                GeneticTreeLeaf l = (GeneticTreeLeaf) child;
+                if (l.getTerminal().getType() == Config.INPUT) return true;
+            } else {
+                GeneticTreeNode n = (GeneticTreeNode) child;
+                if (hasInputLeaf(n)) return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean hasGene(final Gene[] genes, final Gene gene) {
+        for (final Gene g : genes) if (gene == g) return true;
+        return false;
     }
 }
