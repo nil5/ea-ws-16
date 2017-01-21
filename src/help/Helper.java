@@ -4,7 +4,10 @@ import functions.*;
 import terminals.ConstantTerminal;
 import terminals.RandomTerminal;
 import terminals.Terminal;
+import tree.GeneticTreeComponent;
+import tree.GeneticTreeNode;
 
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -54,5 +57,16 @@ public class Helper {
 
     public static int rand(final int min, final int max) {
         return ThreadLocalRandom.current().nextInt(min, max);
+    }
+
+    public static void iterateTree(GeneticTreeComponent component, List<GeneticTreeComponent> componentList){
+        componentList.add(component);
+
+        if (component.type == Config.NODE) {
+            final List<GeneticTreeComponent> children = ((GeneticTreeNode) component).getChildren();
+            for (int i = 0, c = children.size(); i < c; i++) {
+                iterateTree(children.get(i), componentList);
+            }
+        }
     }
 }

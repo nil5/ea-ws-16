@@ -5,6 +5,7 @@ package terminals;
  */
 public class ConstantTerminal implements Terminal {
     private final double value;
+    public final int type = 2;
 
     public ConstantTerminal(final double value) {
         this.value = value;
@@ -13,6 +14,11 @@ public class ConstantTerminal implements Terminal {
     @Override
     public double getValue() {
         return value;
+    }
+
+    @Override
+    public int getType() {
+        return type;
     }
 
     @Override

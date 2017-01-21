@@ -1,9 +1,14 @@
 package gp;
 
 import help.Config;
+import help.Helper;
 import terminals.IOTerminalSet;
-import tree.GeneticTree;
-import tree.TreeCalcVisitor;
+import terminals.InputTerminal;
+import tree.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by Nils on 19.01.2017.
@@ -13,7 +18,7 @@ public class Gene extends GeneticTree implements Comparable<Gene> {
 
     private final int id = idCounter++;
 
-    private double fitness;
+    private double fitness = 0;
 
     public Gene(final Gene gene) {
         super(gene);
@@ -22,7 +27,7 @@ public class Gene extends GeneticTree implements Comparable<Gene> {
     }
 
     public Gene(final IOTerminalSet testTerminal) {
-        this(testTerminal, 2);
+        this(testTerminal, Config.MAXTREEDEPTH);
     }
 
     public Gene(final IOTerminalSet testTerminal, final int maxDepth) {
@@ -35,12 +40,46 @@ public class Gene extends GeneticTree implements Comparable<Gene> {
         updateFitness();
     }
 
-
     public void updateFitness() {
-        final TreeCalcVisitor v = new TreeCalcVisitor();
-        root.accept(v);
-        fitness = Math.abs(v.getResult() - testTerminal.output.getValue());
+        //final TreeCalcVisitor v = new TreeCalcVisitor();
+        //root.accept(v);
+        //fitness = Math.abs(v.getResult() - testTerminal.output.getValue());
+
+        for (int i = 0; i < testTerminal.lineCount; i++) {
+            InputTerminal terminal = getInputTerminal();
+            if (terminal == null) {
+                System.out.println("Could not find InputTerminal");
+                break;
+            }
+            terminal.setValue(testTerminal.inputs[i]);
+
+            final TreeCalcVisitor v = new TreeCalcVisitor();
+            root.accept(v);
+            fitness += Math.abs(v.getResult() - testTerminal.outputs[i]);
+            //System.out.println(newFitness);
+        }
     }
+
+    public InputTerminal getInputTerminal() {
+        final List<GeneticTreeComponent> children = new ArrayList<>();
+        Helper.iterateTree(root, children);
+
+        GeneticTreeLeaf leaf;
+        InputTerminal terminal = null;
+
+        for (GeneticTreeComponent child : children) {
+            if (child.type == Config.LEAF) {
+                leaf = (GeneticTreeLeaf) child;
+
+                if (leaf.getTerminal().getType() == Config.INPUT) {
+                    terminal = (InputTerminal) leaf.getTerminal();
+                    break;
+                }
+            }
+        }
+        return terminal;
+    }
+
 
     public double getFitness() {
         return fitness;

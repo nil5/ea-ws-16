@@ -1,7 +1,12 @@
 package gp;
 
 import help.Config;
+import terminals.Terminal;
+import tree.GeneticTreeComponent;
+import tree.GeneticTreeLeaf;
 import tree.GeneticTreeNode;
+
+import java.util.List;
 
 /**
  * Created by Nils on 19.01.2017.
@@ -37,6 +42,14 @@ public class SubTreeCrossover extends Mutator {
                 if (subNodes[j] == null) {
                     System.out.println("Failed to do crossover. Did not find an appropriate sub node.");
                     continue outer;
+                }
+
+                final List<GeneticTreeComponent> children = subNodes[j].getChildren();
+                for (GeneticTreeComponent child : children) {
+                    if (child.type == Config.LEAF) {
+                        GeneticTreeLeaf terminal = (GeneticTreeLeaf) child;
+                        if (terminal.getTerminal().getType() == Config.INPUT) continue outer;
+                    }
                 }
 
                 if (subNodeLevel < 0) subNodeLevel = subNodes[j].getLevel();

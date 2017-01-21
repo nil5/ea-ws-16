@@ -4,6 +4,7 @@ import functions.Function;
 import help.Config;
 import help.Helper;
 import terminals.IOTerminalSet;
+import terminals.InputTerminal;
 import terminals.Terminal;
 
 import java.util.ArrayList;
@@ -15,19 +16,16 @@ import static help.Config.MODE_GROW;
 /**
  * Created by Nils on 10.01.2017.
  */
-public class GeneticTree {
-    public final int maxDepth;
-    public final int buildMode;
 
+public class GeneticTree {
     protected final IOTerminalSet testTerminal;
 
     protected GeneticTreeNode root;
 
     private int testTerminalInputCount = 0;
+    private boolean hasInputLeaf = false;
 
     protected GeneticTree(final GeneticTree tree) {
-        maxDepth = tree.maxDepth;
-        buildMode = tree.buildMode;
         testTerminal = tree.testTerminal;
         root = new GeneticTreeNode(null, tree.root.getFunction());
 
@@ -35,7 +33,7 @@ public class GeneticTree {
     }
 
     public GeneticTree(final IOTerminalSet testTerminal) {
-        this(testTerminal, 2);
+        this(testTerminal, Config.MAXTREEDEPTH);
     }
 
     public GeneticTree(final IOTerminalSet testTerminal, int maxDepth) {
@@ -45,8 +43,6 @@ public class GeneticTree {
     public GeneticTree(final IOTerminalSet testTerminal, final int maxDepth, final int buildMode) {
         this.root = new GeneticTreeNode(null, Helper.getRandomFunction());
         this.testTerminal = testTerminal;
-        this.maxDepth = maxDepth;
-        this.buildMode = buildMode;
 
         switch (buildMode) {
             case MODE_FULL:
@@ -58,6 +54,7 @@ public class GeneticTree {
         }
     }
 
+    /*
     private void generateFullTree(final GeneticTreeNode node) {
         final int numChildren = node.getFunction().numParams;
 
@@ -79,12 +76,35 @@ public class GeneticTree {
                 new GeneticTreeLeaf(node, terminal);
             }
         }
-    }
-
-    private void generateGrowTree(final GeneticTreeNode node) {
+    }*/
+    private void generateFullTree(final GeneticTreeNode node) {
         final int numChildren = node.getFunction().numParams;
 
-        if (node.getLevel() < maxDepth - 1) {
+        if (node.getLevel() < Config.MAXTREEDEPTH - 1) {
+            for (int i = 0; i < numChildren; i++) {
+                final GeneticTreeNode child = new GeneticTreeNode(node, Helper.getRandomFunction());
+                generateFullTree(child);
+            }
+        } else {
+            for (int i = 0; i < numChildren; i++) {
+                Terminal terminal;
+
+                if (!hasInputLeaf) {
+                    terminal = new InputTerminal();
+                    hasInputLeaf = true;
+                } else {
+                    terminal = Helper.getRandomTerminal();
+                }
+
+                new GeneticTreeLeaf(node, terminal);
+            }
+        }
+    }
+
+    /*private void generateGrowTree(final GeneticTreeNode node) {
+        final int numChildren = node.getFunction().numParams;
+
+        if (node.getLevel() < Config.MAXTREEDEPTH - 1) {
             for (int i = 0; i < numChildren; i++) {
                 // Jedes Blatt einmal verwenden oder sogar der Reihe nach?
                 final Object obj = Helper.getRandomObject();
@@ -102,6 +122,47 @@ public class GeneticTree {
             for (int i = 0; i < numChildren; i++) {
                 // Jedes Blatt einmal verwenden oder sogar der Reihe nach?
                 new GeneticTreeLeaf(node, Helper.getRandomTerminal());
+            }
+        }
+    }*/
+
+    private void generateGrowTree(final GeneticTreeNode node) {
+        final int numChildren = node.getFunction().numParams;
+
+        if (node.getLevel() < Config.MAXTREEDEPTH - 1) {
+            for (int i = 0; i < numChildren; i++) {
+                // Jedes Blatt einmal verwenden oder sogar der Reihe nach?
+                final Object obj = Helper.getRandomObject();
+
+                try {
+                    final Function function = (Function) obj;
+                    final GeneticTreeNode child = new GeneticTreeNode(node, function);
+
+                    generateGrowTree(child);
+                } catch (ClassCastException e) {
+                    Terminal terminal;
+
+                    if (!hasInputLeaf) {
+                        terminal = new InputTerminal();
+                        hasInputLeaf = true;
+                    } else {
+                        terminal = (Terminal) obj;
+                    }
+                    new GeneticTreeLeaf(node, terminal);
+                }
+            }
+        } else {
+            for (int i = 0; i < numChildren; i++) {
+                Terminal terminal;
+
+                if (!hasInputLeaf) {
+                    terminal = new InputTerminal();
+                    hasInputLeaf = true;
+                } else {
+                    terminal = Helper.getRandomTerminal();
+                }
+
+                new GeneticTreeLeaf(node, terminal);
             }
         }
     }
@@ -127,13 +188,14 @@ public class GeneticTree {
         final List<GeneticTreeComponent> children = node.getChildren();
         if (node.level == x) for (GeneticTreeComponent child : children) {
             if (child.type == componentType) list.add(child);
-        } else if (node.level < x) for (GeneticTreeComponent child : children) {
+        }
+        else if (node.level < x) for (GeneticTreeComponent child : children) {
             if (child.type == Config.NODE) getLevel(level, componentType, (GeneticTreeNode) child, list);
         }
     }
 
     public GeneticTreeNode getRandomSubNode(int level) {
-        if (level < 0) level = Helper.rand(1, maxDepth);
+        if (level < 0) level = Helper.rand(1, Config.MAXTREEDEPTH);
 
         final List<GeneticTreeComponent> levelList = new ArrayList<>();
 
@@ -150,4 +212,5 @@ public class GeneticTree {
     public void print() {
         root.accept(new TreePrintVisitor());
     }
+
 }

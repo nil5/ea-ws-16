@@ -16,7 +16,7 @@ public class Main {
     private static double[] input, output;
 
     public static void main(String[] args) throws IllegalAccessException, InstantiationException {
-        final IOTerminalSet[] testTerminals;
+        final IOTerminalSet testTerminal;
         final List<List<String>> values;
 
         try {
@@ -29,17 +29,19 @@ public class Main {
 
         final int lineCount = values.size();
 
-        testTerminals = new IOTerminalSet[lineCount];
+        testTerminal = new IOTerminalSet(values);
+        //testTerminal = new IOTerminalSet[values];
 
-        for (int i = 0; i < lineCount; i++) testTerminals[i] = new IOTerminalSet(values.get(i));
+        //for (int i = 0; i < lineCount; i++) testTerminals[i] = new IOTerminalSet(values.get(i));
 
-        Genome genome = new Genome(Config.MODE_HALF, testTerminals, true);
-
+        Genome genome = new Genome(Config.MODE_HALF, testTerminal, true);
+/*
         for (int i = 0; i < lineCount; i++) {
             final List<String> line = values.get(i);
 
             System.out.println("Line " + (i + 1) + ": " + line.get(0) + " => " + line.get(1));
         }
+*/
 
         final Evolution evolution = new Evolution(genome);
         final Thread evolutionThread = new Thread(evolution);

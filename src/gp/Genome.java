@@ -20,16 +20,17 @@ public class Genome {
     public final boolean protectBest;
     private double fitness = 0;
 
-    private IOTerminalSet[] testTerminalSets;
+    private IOTerminalSet testTerminalSet;
     private Gene[] genes;
 
     private double bestGeneFitness;
     private int bestGeneIndex;
 
 
-    public Genome(final int buildMode, final IOTerminalSet[] testTerminalSets, final boolean protectBest) {
-        this.testTerminalSets = testTerminalSets;
-        this.length = testTerminalSets.length;
+    public Genome(final int buildMode, final IOTerminalSet testTerminalSet, final boolean protectBest) {
+        this.testTerminalSet = testTerminalSet;
+        //this.length = testTerminalSets.length;
+        this.length = Config.GENECOUNT;
         this.protectBest = protectBest;
         this.genes = new Gene[length];
 
@@ -54,7 +55,8 @@ public class Genome {
     }
 
     public void setGene(final int index, final int mode) {
-        setGene(index, new Gene(testTerminalSets[index], Config.MAXTREEDEPTH, mode));
+        //setGene(index, new Gene(testTerminalSets[index], Config.MAXTREEDEPTH, mode));
+        setGene(index, new Gene(testTerminalSet, Config.MAXTREEDEPTH, mode));
     }
 
     public void setGene(final int index, final Gene gene) {
@@ -81,7 +83,7 @@ public class Genome {
 
             System.out.println("Mutate Tree Nr: " + geneIndex);
 
-            iterateTree(root, components);
+            Helper.iterateTree(root, components);
 
             final int componentsSize = components.size();
             final int componentNo = ThreadLocalRandom.current().nextInt(0, componentsSize);
@@ -115,21 +117,6 @@ public class Genome {
             if (!Double.isNaN(fitness) && fitness < bestGeneFitness) {
                 bestGeneIndex = geneIndex;
                 bestGeneFitness = fitness;
-            }
-        }
-    }
-
-    public void crossover() {
-
-    }
-
-    public void iterateTree(GeneticTreeComponent component, List<GeneticTreeComponent> componentList){
-        componentList.add(component);
-
-        if (component.type == Config.NODE) {
-            final List<GeneticTreeComponent> children = ((GeneticTreeNode) component).getChildren();
-            for (int i = 0, c = children.size(); i < c; i++) {
-                iterateTree(children.get(i), componentList);
             }
         }
     }

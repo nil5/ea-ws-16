@@ -5,4 +5,5 @@ package terminals;
  */
 public interface Terminal {
     double getValue();
+    int getType();
 }
