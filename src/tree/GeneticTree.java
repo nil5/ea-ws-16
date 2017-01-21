@@ -12,6 +12,7 @@ import java.util.List;
 import static help.Config.MODE_FULL;
 import static help.Config.MODE_GROW;
 
+
 /**
  * Created by Nils on 10.01.2017.
  */
@@ -154,6 +155,10 @@ public class GeneticTree {
 
     public GeneticTreeNode getRoot() {
         return root;
+    }
+
+    public String getFunction() {
+        return root.get();
     }
 
     @Override

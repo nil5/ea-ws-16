@@ -1,5 +1,7 @@
 package functions;
 
+import tree.GeneticTreeNode;
+
 /**
  * Created by Nils on 10.01.2017.
  */
@@ -20,5 +22,16 @@ public class AddFunction extends Function {
         double sum = 0;
         for (double p : params) sum += p;
         return sum;
+    }
+
+    public String get(GeneticTreeNode node) {
+        String function = "(";
+
+        for (int i = 0; i < node.getChildren().size(); i++) {
+            function += node.getChildren().get(i).get();
+            if(i != node.getChildren().size()-1) function += " + ";
+        }
+
+        return function + ")";
     }
 }
