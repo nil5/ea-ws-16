@@ -54,7 +54,7 @@ public class Helper {
             final List<List<String>> values;
 
             try {
-                values = CSVUtils.parseFile("values.csv");
+                values = CSVUtils.parseFile(Config.FILENAME);
             } catch (IOException e) {
                 System.out.println("Could not read values file.");
                 e.printStackTrace();
