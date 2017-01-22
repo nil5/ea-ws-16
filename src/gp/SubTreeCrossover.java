@@ -48,7 +48,7 @@ public class SubTreeCrossover extends Mutator {
 
                 if (hasInputLeaf(subNodes[j])) {
                     if (D) System.out.println("Failed to do crossover. Input leafs are not allowed.");
-                    continue outer;
+                    //continue outer;
                 }
 
                 if (subNodeLevel < 0) subNodeLevel = subNodes[j].getLevel();

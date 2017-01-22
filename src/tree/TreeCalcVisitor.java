@@ -9,10 +9,10 @@ import java.util.List;
  * Created by Nils on 18.01.2017.
  */
 public class TreeCalcVisitor implements TreeVisitor<Double> {
-    private double result;
 
     @Override
     public Double visitComponent(GeneticTreeComponent component) {
+        double result = 0;
         if (component.type == Config.NODE) {
             final GeneticTreeNode node = (GeneticTreeNode) component;
             final List<GeneticTreeComponent> children = node.getChildren();
@@ -20,18 +20,12 @@ public class TreeCalcVisitor implements TreeVisitor<Double> {
             final double[] childValues = new double[childrenSize];
 
             for (int i = 0; i < childrenSize; i++) {
-                final TreeCalcVisitor v = new TreeCalcVisitor();
-                children.get(i).accept(v);
-                childValues[i] = v.getResult();
+                childValues[i] = this.visitComponent(children.get(i));
             }
 
-            result = node.getFunction().execute(childValues);
-        } else result = ((GeneticTreeLeaf) component).getTerminal().getValue();
+            result += node.getFunction().execute(childValues);
+        } else result += ((GeneticTreeLeaf) component).getTerminal().getValue();
 
-        return result;
-    }
-
-    public double getResult() {
         return result;
     }
 }

@@ -13,6 +13,7 @@ public class Main {
     private static int[] progress;
     private static int sumProgress;
     private static double maxProgress;
+    private static double minFitness = Double.MAX_VALUE;
 
     public static void main(String[] args) throws IllegalAccessException, InstantiationException {
         progress = new int[Config.THREADCOUNT];
@@ -25,18 +26,20 @@ public class Main {
         new Executor(Config.THREADCOUNT);
     }
 
-    public static synchronized void updateProgress(final int evolutionId, final int generationNum) {
+    public static synchronized void updateProgress(final int evolutionId, final int generationNum, final double fitness) {
         sumProgress -= progress[evolutionId - 1];
         progress[evolutionId - 1] = generationNum;
         sumProgress += generationNum;
+
+        if (fitness < minFitness) minFitness = fitness;
 
         final double p = Math.round(sumProgress / maxProgress * 10000) / 100d;
 
         String progressStr = "";
         for (int i = progressStep; i <= 100; i += progressStep) {
-            progressStr += p >= i ? "=" : " ";
+            progressStr += p >= i ? progressChar : " ";
         }
 
-        System.out.print("\r[" + progressStr + "] " + p + "%");
+        System.out.print("\r[" + progressStr + "] " + p + "% ~ BEST FITNESS: " + Math.round(minFitness * 10) / 10d);
     }
 }

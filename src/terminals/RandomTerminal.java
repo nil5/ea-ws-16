@@ -9,7 +9,7 @@ public class RandomTerminal implements Terminal {
     private final double value;
 
     public RandomTerminal(final double start, final double end) {
-        value = ThreadLocalRandom.current().nextDouble(start, end);
+        value = Math.round(ThreadLocalRandom.current().nextDouble(start, end) * 1000) / 1000d;
     }
 
     @Override

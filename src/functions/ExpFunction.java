@@ -16,6 +16,7 @@ public class ExpFunction extends Function {
         if (params.length != numParams) throw new ArithmeticException("Invalid number of parameters for function '" +
                 name + "'. Expected " + numParams + ", got " + params.length);
 
+        if (params[1] < 0) return Double.NaN;
         return Math.pow(params[0], params[1]);
     }
 

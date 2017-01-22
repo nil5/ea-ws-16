@@ -22,6 +22,12 @@ public class Genome {
     private double bestGeneFitness = Double.MAX_VALUE;
     private int bestGeneIndex = -1;
 
+    public Genome(final Gene[] genes) {
+        this.genes = genes;
+        this.length = genes.length;
+
+        updateBestGeneIndex();
+    }
 
     public Genome(final int buildMode, final int length) {
         this.length = length;

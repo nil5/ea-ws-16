@@ -31,8 +31,8 @@ public class Gene extends GeneticTree implements Comparable<Gene> {
 
     public void updateFitness() {
         final IOTerminalSet[] ioSets = Helper.getIOSets();
-        final List<InputTerminal> inputTerminals = getInputs();
-        final int inputSize = inputTerminals.size();
+        //final List<InputTerminal> inputTerminals = getInputs();
+        //final int inputSize = inputTerminals.size();
 
         fitness = Double.NaN;
 
@@ -46,12 +46,12 @@ public class Gene extends GeneticTree implements Comparable<Gene> {
         for (final IOTerminalSet ioSet : ioSets) {
             final TreeCalcVisitor v = new TreeCalcVisitor();
 
-            for (int i = 0; i < inputSize; i++) {
+            /*for (int i = 0; i < inputSize; i++) {
                 inputTerminals.get(i).setValue(ioSet.inputs[i % ioSets[0].inputs.length].getValue());
-            }
+            }*/
+            fillInputs(ioSet.inputs[0].getValue());
 
-            root.accept(v);
-            fitness += Math.abs(v.getResult() - ioSet.output.getValue());
+            fitness += Math.abs(v.visitComponent(root) - ioSet.output.getValue());
         }
     }
 

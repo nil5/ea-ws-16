@@ -1,9 +1,12 @@
 package gp;
 
 import help.Config;
+import help.Helper;
 import tree.GeneticTree;
 import tree.GeneticTreeComponent;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
@@ -52,6 +55,7 @@ public class Executor {
             }
 
             System.out.println("\nOVERALL BEST GENE: " + overallBest);
+            System.out.println("\n" + Helper.getValues(overallBest));
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

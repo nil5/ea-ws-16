@@ -55,7 +55,7 @@ public class RandomMutator extends Mutator {
 
                 if (oldTerminal.getType() == Config.INPUT) {
                     //System.out.println("Failed to mutate. Input leafs are not allowed.");
-                    continue;
+                    //continue;
                 }
 
                 leaf.setTerminal(newTerminal);

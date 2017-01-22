@@ -13,7 +13,7 @@ public class Evolution implements Callable<Genome> {
 
     public final int id = idCounter++;
 
-    private final Genome genome;
+    private Genome genome;
 
     public Evolution(final Genome genome) {
         this.genome = genome;
@@ -21,21 +21,29 @@ public class Evolution implements Callable<Genome> {
 
     @Override
     public Genome call() {
-        final Mutator mutation = new RandomMutator(Config.MUTATIONRATE, Config.PROTECT_BEST);
+        final Mutator subTreeMutator = new SubTreeMutator(Config.MUTATIONRATE, Config.PROTECT_BEST);
+        final Mutator randomMutation = new RandomMutator(Config.MUTATIONRATE, Config.PROTECT_BEST);
+        final Mutator swapMutator = new SwapMutator(Config.MUTATIONRATE, Config.PROTECT_BEST);
         final Mutator crossover = new SubTreeCrossover(Config.RECOMBINATIONRATE, Config.PROTECT_BEST, Config.TOURNAMENTSIZE);
+        //final Replication replication = new BestXRandomReplication(2, 0.5);
+        final Replication replication = new RankBasedReplication(genome.length, Config.PROTECT_BEST);
         Gene winner = null;
 
         for (int i = 0; i < Config.GENERATIONCOUNT; i++) {
-            mutation.mutate(genome);
+            genome = replication.replicate(genome);
+            subTreeMutator.mutate(genome);
+            randomMutation.mutate(genome);
+            swapMutator.mutate(genome);
             crossover.mutate(genome);
 
             final Gene fittest = genome.get(genome.getBestGeneIndex());
             // System.out.println(genome);
 
-            if (winner == null || fittest.getFitness() < winner.getFitness())
+            if (winner == null || fittest.getFitness() < winner.getFitness()) {
                 winner = fittest;
+            }
             //System.out.println("GEN " + (i + 1) + ": " + fittest.getFitness());
-            Main.updateProgress(id, i + 1);
+            Main.updateProgress(id, i + 1, winner.getFitness());
         }
 
         return genome;

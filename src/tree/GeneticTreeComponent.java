@@ -38,7 +38,7 @@ public abstract class GeneticTreeComponent {
         return true;
     }
 
-    private void updateLevel() {
+    public void updateLevel() {
         GeneticTreeNode parent = this.parent;
         level = 0;
 

@@ -1,12 +1,15 @@
 package help;
 
 import functions.*;
+import gp.Gene;
 import io.CSVUtils;
 import terminals.IOTerminalSet;
+import terminals.InputTerminal;
 import terminals.RandomTerminal;
 import terminals.Terminal;
 import tree.GeneticTreeComponent;
 import tree.GeneticTreeNode;
+import tree.TreeCalcVisitor;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,8 +25,8 @@ public class Helper {
             new MultiplyFunction(),
             new DivideFunction(),
             new SinusFunction(),
-            new CosinusFunction(),
-            new ExpFunction()
+            new CosinusFunction()/*,
+            new ExpFunction()*/
     };
 
     private static IOTerminalSet[] inputOutputSets = null;
@@ -39,7 +42,7 @@ public class Helper {
     }
 
     public static Terminal getRandomTerminal() {
-        return new RandomTerminal(Config.MIN, Config.MAX);
+        return rand(0, 2) == 0 ? new RandomTerminal(Config.MIN, Config.MAX) : new InputTerminal();
     }
 
     public static Object getRandomObject() {
@@ -70,6 +73,19 @@ public class Helper {
         }
 
         return inputOutputSets;
+    }
+
+    public static String getValues(final Gene gene) {
+        final TreeCalcVisitor vis = new TreeCalcVisitor();
+
+        String s = "";
+        for (final IOTerminalSet ioSet : getIOSets()) {
+            gene.fillInputs(ioSet.inputs[0].getValue());
+
+            s += vis.visitComponent(gene.getRoot()) + "\n";
+        }
+
+        return s.replace('.', ',');
     }
 
     public static int rand(final int min, final int max) {
