@@ -1,6 +1,7 @@
 package gp;
 
 import help.Config;
+import main.Main;
 
 import java.util.concurrent.Callable;
 
@@ -8,6 +9,10 @@ import java.util.concurrent.Callable;
  * Created by Nils on 19.01.2017.
  */
 public class Evolution implements Callable<Genome> {
+    private static int idCounter = 1;
+
+    public final int id = idCounter++;
+
     private final Genome genome;
 
     public Evolution(final Genome genome) {
@@ -29,10 +34,9 @@ public class Evolution implements Callable<Genome> {
 
             if (winner == null || fittest.getFitness() < winner.getFitness())
                 winner = fittest;
-            System.out.println("GEN " + (i + 1) + ": " + fittest.getFitness());
+            //System.out.println("GEN " + (i + 1) + ": " + fittest.getFitness());
+            Main.updateProgress(id, i + 1);
         }
-
-        System.out.println(winner);
 
         return genome;
     }

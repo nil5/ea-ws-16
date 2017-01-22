@@ -37,10 +37,10 @@ public class Genome {
         updateBestGeneIndex();
 
         // Debugging
-        for (Gene gene : genes) {
+        /*for (Gene gene : genes) {
             System.out.println(gene.toString() + "\nTree result: " + gene.getFitness());
             System.out.println("Tree function: " + gene.getFunction());
-        }
+        }*/
     }
 
     public Gene get(final int index) {

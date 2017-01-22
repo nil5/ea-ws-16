@@ -65,7 +65,7 @@ public class Helper {
 
                 inputOutputSets[i] = new IOTerminalSet(line);
 
-                System.out.println("Line " + (i + 1) + ": " + line.get(0) + " => " + line.get(1));
+                //System.out.println("Line " + (i + 1) + ": " + line.get(0) + " => " + line.get(1));
             }
         }
 
