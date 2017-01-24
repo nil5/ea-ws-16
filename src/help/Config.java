@@ -6,9 +6,9 @@ package help;
 public final class Config {
     public static final int THREADCOUNT = 8;
     public static final int GENECOUNT = 100;
-    public static final int GENERATIONCOUNT = 5000;
+    public static final int GENERATIONCOUNT = 100;
     public static final int TOURNAMENTSIZE = 5;
-    public static final int MAXTREEDEPTH = 6;
+    public static final int MAXTREEDEPTH = 4;
     public static final int INIT = 3;
     public static final double MUTATIONRATE = 1;
     public static final double RECOMBINATIONRATE = 0.3;

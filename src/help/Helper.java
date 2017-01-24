@@ -25,7 +25,8 @@ public class Helper {
             //new MultiplyFunction(),
             new DivideFunction(),
             //new SinusFunction(),
-            new CosinusFunction()/*,
+            new CosinusFunction(),
+            new LogFunction()/*,
             new ExpFunction()*/
     };
 

@@ -51,8 +51,11 @@ public class Evolution implements Callable<Genome> {
             if (winner == null || fittest.getFitness() < winner.getFitness()) {
                 winner = fittest;
             }
-            //System.out.println("GEN " + (i + 1) + ": " + fittest.getFitness());
-            Main.updateProgress(id, i + 1, winner.getFitness());
+
+            final double fitness = Math.round(winner.getFitness() * 10000000) / 100000000;
+
+            Main.updateProgress(id, i + 1, fitness, id, i + 1);
+            if (fitness == 0) break;
         }
 
         return genome;
