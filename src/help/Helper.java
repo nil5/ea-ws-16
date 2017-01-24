@@ -21,10 +21,10 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Helper {
     public static final Function[] functionSet = new Function[] {
             new AddFunction(),
-            new SubtractFunction(),
-            new MultiplyFunction(),
+            //new SubtractFunction(),
+            //new MultiplyFunction(),
             new DivideFunction(),
-            new SinusFunction(),
+            //new SinusFunction(),
             new CosinusFunction()/*,
             new ExpFunction()*/
     };
@@ -42,11 +42,11 @@ public class Helper {
     }
 
     public static Terminal getRandomTerminal() {
-        return rand(0, 2) == 0 ? new RandomTerminal(Config.MIN, Config.MAX) : new InputTerminal();
+        return rand(0, 100) < 20 ? new RandomTerminal(Config.MIN, Config.MAX) : new InputTerminal();
     }
 
     public static Object getRandomObject() {
-        return rand(0, 1) == 0 ? functionSet[rand(0, functionSet.length)] : getRandomTerminal();
+        return rand(0, 2) < 1 ? functionSet[rand(0, functionSet.length)] : getRandomTerminal();
     }
 
     public static IOTerminalSet[] getIOSets() {

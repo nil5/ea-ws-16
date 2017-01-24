@@ -5,16 +5,16 @@ package help;
  */
 public final class Config {
     public static final int THREADCOUNT = 8;
-    public static final int GENECOUNT = 50;
-    public static final int GENERATIONCOUNT = 2000;
-    public static final int TOURNAMENTSIZE = 10;
+    public static final int GENECOUNT = 100;
+    public static final int GENERATIONCOUNT = 5000;
+    public static final int TOURNAMENTSIZE = 5;
     public static final int MAXTREEDEPTH = 6;
-    public static final int INIT = 1;
-    public static final double MUTATIONRATE = 0.5;
-    public static final double RECOMBINATIONRATE = 0.25;
+    public static final int INIT = 3;
+    public static final double MUTATIONRATE = 1;
+    public static final double RECOMBINATIONRATE = 0.3;
     public static final boolean PROTECT_BEST = true;
-    public static final double MIN = 0.0;
-    public static final double MAX = 20.0;
+    public static final double MIN = -20;
+    public static final double MAX = 20;
 
     public static final String FILENAME = "values.csv";
 

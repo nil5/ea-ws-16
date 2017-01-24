@@ -36,8 +36,10 @@ public class Genome {
         int i = 0;
 
         if (buildMode == Config.MODE_HALF) {
-            for (; i < length / 2; i++) genes[i] = new Gene(Config.MAXTREEDEPTH, Config.MODE_FULL);
-            for (; i < length; i++) genes[i] = new Gene(Config.MAXTREEDEPTH, Config.MODE_GROW);
+            for (; i < length; i++) {
+                final int depth = (i % (Config.MAXTREEDEPTH - 1)) + 2;
+                genes[i] = new Gene(depth, i < length / 2 ? Config.MODE_FULL : Config.MODE_GROW);
+            }
         } else for (; i < length; i++) genes[i] = new Gene(Config.MAXTREEDEPTH, buildMode);
 
         updateBestGeneIndex();

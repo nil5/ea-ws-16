@@ -38,7 +38,7 @@ public class SubTreeMutator extends Mutator {
 
             if (node == null) continue;
 
-            final int depth = Config.MAXTREEDEPTH - node.getLevel() - 1;
+            final int depth = Config.MAXTREEDEPTH - node.getLevel();
 
             if (depth < 1) continue;
 

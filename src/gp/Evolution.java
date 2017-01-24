@@ -31,9 +31,18 @@ public class Evolution implements Callable<Genome> {
 
         for (int i = 0; i < Config.GENERATIONCOUNT; i++) {
             genome = replication.replicate(genome);
-            subTreeMutator.mutate(genome);
-            randomMutation.mutate(genome);
-            swapMutator.mutate(genome);
+
+            switch (i % 3) {
+                case 0:
+                    subTreeMutator.mutate(genome);
+                    break;
+                case 1:
+                    randomMutation.mutate(genome);
+                    break;
+                case 2:
+                    swapMutator.mutate(genome);
+                    break;
+            }
             crossover.mutate(genome);
 
             final Gene fittest = genome.get(genome.getBestGeneIndex());
